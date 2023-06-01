@@ -1,0 +1,2221 @@
+Q1) Implement Stack from Scratch
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+A] for array implementation of stack
+""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+struct MyStack
+{
+    int *arr;
+    int cap;
+    int top;
+    
+    MyStack(int c)
+    {
+        cap = c;
+        arr = new int[cap];
+        top = -1;
+    }
+    
+    void push(int x)
+    {
+        if(top == cap-1)
+        {
+            cout << "Stack is full" << endl;
+            return;
+            
+        }
+        top++;
+        arr[top] = x;
+    }
+    
+    int pop()
+    {
+        if(top == -1)
+        {
+            cout << "Stack is Empty" << endl;
+            return INT_MIN;
+            
+        }
+        int res = arr[top];
+        top--;
+        cout << "poped elementt is ";
+        return res;
+    }
+    
+    int peek()
+    {
+        if(top == -1)
+        {
+            cout<<"Stack is Empty"<<endl;
+            return INT_MIN;
+            
+        }
+        cout << "top element of stack is ";
+        return arr[top];
+    }
+    
+    int size()
+    {
+        cout << "size of stack is ";
+        return (top + 1);
+    }
+    
+    bool isEmpty()
+    {
+        return top == -1;
+    }
+};
+
+int main()
+{
+    MyStack s(5);
+    s.push(5);
+    s.push(10);
+    s.push(20);
+    
+    cout << s.pop() << endl;
+    cout << s.pop() << endl;
+    cout << s.size() << endl;
+    cout << s.peek() << endl;
+    cout << s.isEmpty() << endl;
+  
+    return 0; 
+}
+
+Output : 
+********
+poped elementt is 20
+poped elementt is 10
+size of stack is 1
+top element of stack is 5
+0
+-----------------------------------------
+B] for linked list implementation of stack
+""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node
+{
+    int data;
+    Node *next;
+    Node(int x)
+    {
+        data=x;
+        next=NULL;
+    }
+};
+
+struct MyStack
+{
+    Node *head;
+    int siz;
+    MyStack()
+    {
+        head = NULL;
+        siz = 0;
+    }
+    
+    void push(int x)
+    {
+        Node *temp = new Node(x);
+        temp->next = head;
+        head = temp;
+        siz++;
+    }
+    
+    int pop()
+    {
+        if(head == NULL)
+        {
+            cout << "stack is empty" << endl;
+            return INT_MIN;
+        }
+        int res = head->data;
+        Node *temp = head;
+        head = head->next;
+        delete temp;
+        siz--;
+        cout << "poped elementt is ";
+        return res;
+    }
+    
+    int peek()
+    {
+        if(head == NULL)
+        {
+            cout << "stack is empty" << endl;
+            return INT_MIN;
+        }
+        cout << "top element of stack is ";
+        return head->data;
+    }
+    
+    int size()
+    {
+        cout << "size of stack is ";
+        return siz;
+    }
+    
+    bool isEmpty()
+    {
+        return head == NULL;
+    }
+};
+
+int main()
+{
+    MyStack s;
+    s.push(5);
+    s.push(10);
+    s.push(20);
+    
+    cout << s.pop() << endl;
+    cout << s.size() << endl;
+    cout << s.peek() << endl;
+    cout << s.isEmpty() << endl;
+  
+    return 0; 
+}
+
+Output:
+*******
+poped elementt is 20
+size of stack is 2
+top element of stack is 10
+0
+-----------------------------------------------------------------------------------
+Q2) implement two stack in an array
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+//Function to push an integer into the stack1.
+void twoStacks :: push1(int x)
+{
+    top1++;
+    arr[top1] = x;
+}
+   
+//Function to push an integer into the stack2.
+void twoStacks ::push2(int x)
+{
+    top2--;
+    arr[top2] = x;
+}
+   
+//Function to remove an element from top of the stack1.
+int twoStacks ::pop1()
+{
+    if(top1 == -1) return -1;
+    else return arr[top1--];
+}
+
+//Function to remove an element from top of the stack2.
+int twoStacks :: pop2()
+{
+    if(top2 == size) return -1;
+    else return arr[top2++];
+}
+-----------------------------------------------------------------------------------
+Q3) 				next greater element
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vector<long long> nextLargerElement(vector<long long> arr, int n)
+{
+    stack<long long> s;
+    vector<long long> v;
+    for(int i=n-1; i>=0; i--)
+    {
+        if(s.empty()) v.push_back(-1);
+        else if(!s.empty() && s.top() > arr[i]) v.push_back(s.top());
+        else if(!s.empty() && s.top() <= arr[i])
+        {
+            while(!s.empty() && s.top() <= arr[i])
+            {
+                s.pop();
+            }
+            if(s.empty()) v.push_back(-1);
+            else v.push_back(s.top());
+        }
+        s.push(arr[i]);
+    }
+    reverse(v.begin(), v.end());
+    return v;
+}
+-----------------------------------------------------------------------------------
+Q4) 				previous greater element
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> printPGE(int arr[], int n)
+{
+    stack<long long> s;
+    vector<long long> v;
+    for(int i=0; i<n; i++)
+    {
+        if(s.empty()) v.push_back(-1);
+        else if(!s.empty() && s.top() > arr[i]) v.push_back(s.top());
+        else if(!s.empty() && s.top() <= arr[i])
+        {
+            while(!s.empty() && s.top() <= arr[i])
+            {
+                s.pop();
+            }
+            if(s.empty()) v.push_back(-1);
+            else v.push_back(s.top());
+        }
+        s.push(arr[i]);
+    }
+    return v;
+}
+
+int main()
+{
+	int arr[] = {10, 4, 2, 20, 40, 12, 30};
+	int n = sizeof(arr) / sizeof(arr[0]);
+	vector<long long> res = printPGE(arr, n);
+	for(auto x : res)
+	    cout << x << " ";
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q5) 				Next smaller element
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> printNSE(int arr[], int n)
+{
+    stack<long long> s;
+    vector<long long> v;
+    for(int i=n-1; i>=0; i--)
+    {
+        if(s.empty()) v.push_back(-1);
+        else if(!s.empty() && s.top() < arr[i]) v.push_back(s.top());
+        else if(!s.empty() && s.top() >= arr[i])
+        {
+            while(!s.empty() && s.top() >= arr[i])
+            {
+                s.pop();
+            }
+            if(s.empty()) v.push_back(-1);
+            else v.push_back(s.top());
+        }
+        s.push(arr[i]);
+    }
+    reverse(v.begin(), v.end());
+    return v;
+}
+
+int main()
+{
+	int arr[] = { 11, 13, 21, 3 };
+	int n = sizeof(arr) / sizeof(arr[0]);
+	vector<long long> res = printNSE(arr, n);
+	for(auto x : res)
+	    cout << x << " ";
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q6)				 previous smaller element
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<long long> printPSE(int arr[], int n)
+{
+    stack<long long> s;
+    vector<long long> v;
+    for(int i=0; i<n; i++)
+    {
+        if(s.empty()) v.push_back(-1);
+        else if(!s.empty() && s.top() < arr[i]) v.push_back(s.top());
+        else if(!s.empty() && s.top() >= arr[i])
+        {
+            while(!s.empty() && s.top() >= arr[i])
+            {
+                s.pop();
+            }
+            if(s.empty()) v.push_back(-1);
+            else v.push_back(s.top());
+        }
+        s.push(arr[i]);
+    }
+    return v;
+}
+
+int main()
+{
+	int arr[] = {2, 5, 3, 7, 8, 1, 9};
+	int n = sizeof(arr) / sizeof(arr[0]);
+	vector<long long> res = printPSE(arr, n);
+	for(auto x : res)
+	    cout << x << " ";
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q7) 			Maximum Rectangular Area in a Histogram
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+long long getMaxArea(long long arr[], int n)
+{
+    long long area = -1;
+    vector<long long> v1;
+    stack<pair<long long, long long>> s1;
+    
+    for(int i=0; i<n; i++)                       //prev smaller ele..........1)
+    {
+        if(s1.empty()) v1.push_back(-1);
+        else if(!s1.empty() && s1.top().first < arr[i]) v1.push_back(s1.top().second);
+        else if(!s1.empty() && s1.top().first >= arr[i]) 
+        {
+            while(!s1.empty() && s1.top().first >= arr[i])
+            {
+                s1.pop();
+            }
+            if(s1.empty()) v1.push_back(-1);
+            else v1.push_back(s1.top().second);
+        }
+        s1.push({arr[i], i});
+    }
+   /*----------------------------------------------------------------------------------*/ 
+    vector<long long> v2;
+    stack<pair<long long, long long>> s2;
+    
+    for(int i=n-1; i>=0; i--)                    //next smaller ele...........2)
+    {
+        if(s2.empty()) v2.push_back(n);
+        else if(!s2.empty() && s2.top().first < arr[i]) v2.push_back(s2.top().second);
+        else if(!s2.empty() && s2.top().first >= arr[i])
+        {
+            while(!s2.empty() && s2.top().first >= arr[i])
+            {
+                s2.pop();
+            }
+            if(s2.empty()) v2.push_back(n);
+            else v2.push_back(s2.top().second);
+        }
+        s2.push({arr[i], i});
+    }
+    reverse(v2.begin(), v2.end());
+    /*----------------------------------------------------------------------------------*/ 
+    for(int i=0; i<n; i++)                      //maxi rectangular area........3)
+    {
+        area = max(arr[i] * (v2[i]-v1[i]-1), area);
+    }
+    return area;
+}
+-----------------------------------------------------------------------------------
+Q8) Reverse a string using Stack 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+char* reverse(char *S, int len)
+{
+    stack<char> st;
+    for(int i=0; i<len; i++) st.push(S[i]);
+    
+    char *arr = new char[len];
+    int i=0;
+    while(!st.empty())
+    {
+        arr[i] = st.top();
+        i++;
+        st.pop();
+    }
+    arr[i] = '\0';
+    return arr;
+}
+-----------------------------------------------------------------------------------
+Q9) find middle element of stack in O(1) time.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+class myStack
+{
+	struct Node
+    	{
+        	int data;
+        	Node *prev;
+        	Node *next;
+        	Node(int x)
+        	{
+            	      data = x;
+            	      prev = next = NULL;
+        	}
+    	};
+
+	//Members of stack
+	Node *head = NULL;
+	Node *mid = NULL;
+	int size = 0;
+
+public:
+	void push(int data)                             //push
+	{
+	    Node *temp = new Node(data);
+            if(size == 0)
+            {
+            	head = temp;
+            	mid = temp;
+            	size++;
+            	return;
+            }
+            head->next = temp;
+            temp->prev = head;
+            head = head->next;                       //update the pointers
+            if(size%2 == 1) mid = mid->next;
+            size++;
+	}
+
+	void pop()                                      //pop       
+	{
+	    if(size)
+	    {
+	        if(size == 1)
+	        {
+	            head = NULL;
+	            mid = NULL;
+	        }
+	        else
+	        {
+	            head = head->prev;
+	            head->next = NULL;
+	            if(size%2 == 0) mid = mid->prev;
+	            size--;
+	        }
+	    }
+	}
+
+	int findMiddle()                                //findMiddle
+	{
+	    if(size == 0) return -1;
+	    return mid->data;
+	}
+
+	void deleteMiddle()                             //deleteMiddle
+	{
+	    if(size)
+	    {
+	        if(size == 1)
+	        {
+	            head = NULL;
+	            mid = NULL;
+	        }
+	        else if(size == 2)
+	        {
+	            head = head->prev;
+	            mid = mid->prev;
+	            head->next = NULL;
+	        }
+	        else
+	        {
+	            mid->next->prev = mid->prev;
+	            mid->prev->next = mid->next;
+	            if(size%2 == 0) mid = mid->prev;
+	            else mid = mid->next;
+	        }
+	        size--;
+	    }
+	}
+};
+
+int main()
+{
+	myStack st;
+	st.push(11);
+	st.push(22);
+	st.push(33);
+	st.push(44);
+	st.push(55);
+    	st.push(66);
+    
+	cout << "middle element of stack : ";
+	cout << st.findMiddle() << endl;		//--->44
+	
+	st.deleteMiddle();
+	cout << "after deleting middle , new middle: ";
+	cout << st.findMiddle() << endl;		//---->33
+	
+	st.pop();
+	st.pop();
+	st.pop();
+	cout<< "after popping 3 elements from stack: ";
+	cout << st.findMiddle() << endl;		//---->22
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q10) Parenthesis Checker
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+bool ispar(string x)
+{
+    stack<char> s;
+    for(int i=0; i<x.length(); i++)
+    {
+        if(s.empty()) 
+        {
+            s.push(x[i]);
+        }
+        
+        else if((s.top() == '{' && x[i] == '}') || (s.top() == '(' && x[i] == ')') || (s.top() == '[' && x[i] == ']') )
+        {
+            s.pop();
+        }
+        else
+        {
+            s.push(x[i]);
+        }
+    }
+    if(s.empty()) return true;
+    else return false;
+}
+-----------------------------------------------------------------------------------
+Q11) Reverse the Words of a String using Stack
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include<bits/stdc++.h>
+using namespace std;
+
+void reverse(string s)
+{
+    stack<string> st;
+    string temp = "";
+    for(int i=0; i<s.length(); i++)
+    {
+        if(s[i] == ' ')
+        {
+            st.push(temp);
+            temp = "";
+        }
+        else
+        {
+            temp = temp + s[i];
+        }
+    }
+    st.push(temp);
+    
+    while(!st.empty())
+    {
+        temp = st.top();
+        cout << temp << " ";
+        st.pop();
+    }
+}
+
+int main()
+{
+    string s="I Love To Code";
+    reverse(s);
+    return 0;
+}
+-----------------------------------------------------------------------------------
+Q12) Design a Stack that supports getMin() in O(1) time and O(1) extra space.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int mini = 99999;
+void push(stack<int>& s, int a)
+{
+	if(s.empty())
+	{
+	    mini = a;
+	    s.push(a);
+	}
+	else
+	{
+	    int x = a;
+	    if(a < mini)
+	    {
+	        x = 2*a-mini;
+	        mini = a;
+	    }
+	    s.push(x);
+	}
+}
+
+bool isFull(stack<int>& s,int n)
+{
+	if(s.size() == n) return true;
+	else return false;
+}
+
+bool isEmpty(stack<int>& s)
+{
+	if(s.empty()) return true;
+	else return false;
+}
+
+int pop(stack<int>& s)
+{
+	if(s.top() < mini)
+	{
+	    mini = 2*mini - s.top();
+	}
+	s.pop();
+}
+
+int getMin(stack<int>& s)
+{
+	return mini;
+}
+-----------------------------------------------------------------------------------
+Q13) The Celebrity Problem
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int celebrity(vector<vector<int>> &M, int n) 
+{
+    int c = 0;
+    for(int i=1; i<n; i++)
+    {
+        if(M[c][i] == 1)
+            c = i;
+    }                           	//updated c don't know anyother person.
+    
+    for(int i=0; i<n; i++)
+    {
+        if(i != c && M[i][c] == 0)      //if i == c then M[i][c] == 0 so there is no meaning of checking
+        {                               //if(cond) hold means there is atleast one person who don't know c
+            return -1;
+        }
+    }
+    return c;
+}
+-----------------------------------------------------------------------------------
+#include <bits/stdc++.h>			//inefficiant approach
+using namespace std;
+
+#define N 4
+bool M[N][N] = {{0, 0, 1, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 0},
+		{0, 0, 1, 0}};
+
+int findCelebrity(int n)
+{ 
+	int indegree[n] = {0}, outdegree[n] = {0};
+	
+	for(int i=0; i<n; i++)
+	{
+		for(int j=0; j<n; j++)
+		{
+			if(M[i][j] == 1)
+			{
+			    outdegree[i]++;
+			    indegree[j]++;
+			}
+		}
+	}
+	
+	for(int i=0; i<n; i++)
+	{
+	    if(indegree[i] == n-1 && outdegree[i] == 0)
+	    {
+		    return i;
+	    }
+	}
+	return -1;
+}
+
+int main()
+{
+	int n = 4;
+	int id = findCelebrity(n);
+	id == -1 ?  cout << "No celebrity" : cout << "Celebrity ID " << id;
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q14) Evaluate Reverse Polish Notation
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int evalRPN(vector<string>& tokens) 		//Leetcode (efficient solution)
+{
+    stack<int> s;
+    for(string x : tokens)
+    {
+        if(x == "+")
+        {
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a + b);
+        }
+        else if(x == "-")
+        {
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a - b);
+        }
+        else if(x == "*")
+        {
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a * b);
+        }
+        else if(x == "/")
+        {
+            int b = s.top();
+            s.pop();
+            int a = s.top();
+            s.pop();
+            s.push(a / b);
+        }
+        else
+        {
+            s.push(stoi(x));
+        }
+    }
+    return s.top();
+}
+-----------------------------------------------------------------------------------
+int evaluatePostfix(string S)			//gfg practice (efficient sol)
+{
+    stack<int> st;
+    for(int i=0; i<S.length(); i++)
+    {
+        if(48 <= S[i] && S[i] <= 57)
+        {
+            st.push(S[i]-'0');                      //here we can use 48 instead of '0'
+        }
+        else
+        {
+            int b = st.top();
+            st.pop();
+            int a = st.top();
+            st.pop();
+            if(S[i] == '+') st.push(a + b);
+            else if(S[i] == '-') st.push(a - b);
+            else if(S[i] == '*') st.push(a * b);
+            else if(S[i] == '/') st.push(a / b);
+        }
+    }
+    return st.top();
+}
+-----------------------------------------------------------------------------------
+Q15) Implement a method to insert an element at its bottom without using any other data structure.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+stack<int> pushAtBottom(stack<int>& myStack, int x) 	//coding ninjas (efficient)
+{
+    	stack<int> s;
+	while(!myStack.empty())
+	{
+		int a = myStack.top();
+		myStack.pop();
+		s.push(a);
+	}
+	
+	myStack.push(x);
+	while(!s.empty())
+	{
+		int b = s.top();
+		s.pop();
+		myStack.push(b);
+	}
+	return myStack;
+}
+-----------------------------------------------------------------------------------
+#include <bits/stdc++.h>			//gfg by implicit stack
+using namespace std;
+
+// Recursive function to use "implicit stack" to insert an element at the bottom of stack
+stack<int> recur(stack<int> S, int N)
+{
+	if (S.empty()) S.push(N);
+
+	else 
+	{
+        	int X = S.top();        // Stores the top element
+        	S.pop();                // Pop the top element
+        	S = recur(S, N);        // Recurse with remaining elements
+		S.push(X);              // Push the previous top element again
+	}
+	return S;
+}
+
+void insertToBottom(stack<int> S, int N)
+{
+    	S = recur(S, N);            // Recursively insert N at the bottom of S
+
+	while (!S.empty())          // Print the stack S
+	{
+		cout << S.top() << " ";
+		S.pop();
+	}
+}
+
+int main()
+{
+	stack<int> S;
+	S.push(5);
+	S.push(4);
+	S.push(3);
+	S.push(2);
+	S.push(1);
+
+	int N = 7;
+
+	insertToBottom(S, N);
+
+	return 0;
+}
+-----------------------------------------------------------------------------------
+Q16) reverse a stack
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vector<int> Reverse(stack<int> St)			//without recurrence
+{
+    vector<int> v;
+    
+    while(!St.empty())
+    {
+        v.push_back(St.top());
+        St.pop();
+    }
+    return v;
+}
+-----------------------------------------------------------------------------------
+class Solution						//using recurrence
+{
+public:
+void insert_at_bottom(stack<int> &St, int x)
+{
+    if(St.empty()) St.push(x);
+    else
+    {
+        int a = St.top();
+        St.pop();
+        insert_at_bottom(St, x);
+        St.push(a);
+    }
+}
+
+void recur(stack<int> &St)
+{
+    if(!St.empty())
+    {
+        int x = St.top();		// Stores the top element
+        St.pop();			// Pop the top element
+        recur(St);			// Recurse with remaining elements
+        insert_at_bottom(St, x);	// insert at bottom the previous top element 
+    }
+}
+
+vector<int> Reverse(stack<int> St)
+{
+    recur(St);
+    vector<int> v;
+    while(!St.empty())
+    {
+        v.push_back(St.top());
+        St.pop();
+    }
+    reverse(v.begin(), v.end());
+    return v;
+}
+};
+-----------------------------------------------------------------------------------
+Q17) sort a stack
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+void sorted_insert(stack<int> &s, int x)
+{
+    if(s.empty() || x > s.top()) 
+    {
+        s.push(x);
+    }
+    else
+    {
+        int a = s.top();
+        s.pop();
+        sorted_insert(s,x);
+        s.push(a);
+    }
+}
+
+void SortedStack :: sort()
+{
+   if(!s.empty())
+   {
+       int x = s.top();
+       s.pop();
+       sort();
+       sorted_insert(s,x);
+   }
+}
+-----------------------------------------------------------------------------------
+Q18) 	Merge Overlapping Intervals 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution {					//Leetcode sol
+public:
+vector<vector<int>> merge(vector<vector<int>>& intervals) 
+{
+   vector<vector<int>> ans = {};
+    
+    if(intervals.size() == 0) return ans;
+    
+    sort(intervals.begin(), intervals.end());
+    vector<int> temp = intervals[0];		//x = [1,3] --> x[0]= 1 & x[1]=3
+    for(auto x : intervals)
+    {
+        if(x[0] <= temp[1])
+            temp[1] = max(temp[1], x[1]);
+        else
+        {
+            ans.push_back(temp);
+            temp = x;
+        }
+    }
+    ans.push_back(temp);
+    return ans;
+}
+};
+-----------------------------------------------------------------------------------
+Q19) 	Length of the Longest Valid Substring
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int longestValidParentheses(string s) 
+{
+    int n = s.size();
+    int left=0, right=0, max_length=0, t=2;
+    while(t--)
+    {
+        left=0;
+        right=0;
+        for(int i=0;i<n;i++)
+        {
+            if(s[i] == '(') left++;
+            else right++;
+                 
+            if(left==right)
+                max_length = max(max_length, 2*left);
+            
+            if(t%2==1 && right>left)            //when travelling from 0 to n-1   
+            {
+                left=0;
+                right=0;
+            }
+              
+            if(t%2==0 && left>right)            //when travelling from n-1 to 0
+            {
+                left=0;
+                right=0;
+            }
+        }
+        reverse(s.begin(), s.end());  //now we need to do the same thing from the other side;
+    }
+    return max_length;
+}
+-----------------------------------------------------------------------------------
+int findMaxLen(string s) 		//Note: above & this code are exactly same 
+{
+        int n = s.length();
+        int left = 0, right = 0, maxlength = 0;
+        for (int i = 0; i < n; i++) 			//when travelling from 0 to n-1  
+	{
+            if(s[i] == '(') left++;
+            else right++;
+
+            if (left == right) maxlength = max(maxlength, 2 * right);
+
+            else if(right > left) left = right = 0;
+        }
+
+        left = right = 0;
+        for (int i = n - 1; i >= 0; i--) 		//when travelling from n-1 to 0
+	{
+            if(s[i] == '(') left++;
+            else right++;
+
+            if (left == right) maxlength = max(maxlength, 2 * left);
+
+            else if (left > right) left = right = 0;
+        }
+        return maxlength;
+}
+-------------------------------------------------------------------------------------
+Q20) Expression contains redundant bracket or not
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+bool solve(string &s)
+{
+    stack<char> st;
+    for(auto ch : s)
+    {
+        if(ch == ')')
+        {
+            bool f = true;			//true means it contains redundant bracket
+            char top = st.top();
+            st.pop();
+            while(!st.empty() && top != '(')
+            {
+                if(top == '+' || top == '-' || top == '*' || top == '/')
+                    f = false;
+                top = st.top();
+                st.pop();
+            }
+            if(f == true) return true;
+        }
+        else
+        {
+            st.push(ch);
+        }
+    }
+    return false;
+}
+
+        
+void findRedundant(string &s)
+{
+	bool ans = solve(s);
+	if(ans == true) cout << "Yes" << endl;
+	else cout << "no" << endl;
+}
+
+int main()
+{
+	string s = "((a+b))";
+	findRedundant(s);		//yes
+
+	s = "(a+(b)/c)";
+	findRedundant(s);		//yes
+
+	s = "(a+b*(c-d))";
+	findRedundant(s);		//no
+
+	return 0;
+}
+-------------------------------------------------------------------------------------
+Q21) Implement Queue from Scratch
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+A] for array implementation of Queue
+""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h> 
+using namespace std; 
+
+ 
+class Queue 
+{ 
+    public: 
+	int front, rear, size; 
+	unsigned capacity; 
+	int *array; 
+}; 
+
+ 
+Queue* createQueue(unsigned capacity)                   //createQueue
+{ 
+	Queue* queue = new Queue(); 
+	queue->capacity = capacity; 
+	queue->front = 0;
+	queue->size = 0; 
+    	queue->rear = capacity - 1; 
+    
+	queue->array = new int[(queue->capacity * sizeof(int))]; 
+	return queue; 
+} 
+
+ 
+int isFull(Queue* queue)                                //isFull
+{ 
+	return queue->size == queue->capacity; 
+} 
+
+
+int isEmpty(Queue* queue)                               //isEmpty
+{ 
+	return queue->size == 0; 
+} 
+
+
+void enqueue(Queue* queue, int item)                    //enqueue
+{ 
+	if (isFull(queue)) return;                  //base cond
+	
+	queue->rear = (queue->rear + 1) % queue->capacity; 
+	queue->array[queue->rear] = item; 
+	queue->size++; 
+	cout << item << " enqueued to queue\n"; 
+} 
+
+ 
+int dequeue(Queue* queue)                               //dequeue
+{ 
+	if (isEmpty(queue)) return INT_MIN;         //base cond 
+	
+	int item = queue->array[queue->front]; 
+	queue->front = (queue->front + 1) % queue->capacity; 
+	queue->size--; 
+	return item; 
+} 
+
+
+int front(Queue* queue)                                 //front
+{ 
+	if(isEmpty(queue)) return -1;         //base cond
+	
+	return queue->array[queue->front]; 
+} 
+
+ 
+int rear(Queue* queue)                                  //rear
+{ 
+	if(isEmpty(queue)) return INT_MIN;          //base cond
+	
+	return queue->array[queue->rear]; 
+} 
+
+ 
+int main() 
+{ 
+	Queue* queue = createQueue(1000); 
+
+	enqueue(queue, 10); 
+	enqueue(queue, 20); 
+	enqueue(queue, 30); 
+	enqueue(queue, 40); 
+
+	cout << dequeue(queue) << " dequeued from queue\n"; 
+    	cout << "Front item is " << front(queue) << endl; 
+	cout << "Rear item is " << rear(queue) << endl; 
+
+	return 0; 
+} 
+
+Output:
+*******
+10 enqueued to queue
+20 enqueued to queue
+30 enqueued to queue
+40 enqueued to queue
+10 dequeued from queue
+Front item is 20
+Rear item is 40
+-----------------------------------------------------------------------------------
+B] for linked list implementation of queue
+""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h> 
+using namespace std; 
+
+struct Node
+{
+    int data;
+    Node *next;
+    Node(int x)
+    {
+        data = x;
+        next = NULL;
+    }
+};
+
+struct Queue
+{
+    Node *front, *rear;
+    Queue()
+    {
+        front = rear = NULL;
+    }
+    
+    void enQueue(int x)
+    {
+        Node *temp = new Node(x);
+        if(rear == NULL)                    //empty LL
+        {
+            front = rear =temp;
+            return;
+        }
+        rear->next = temp;
+        rear = temp;
+    }
+    
+    void deQueue()
+    {
+        if(front == NULL) return;           //empty LL
+        Node *temp = front;
+        front = front->next;
+        if(front == NULL) rear = NULL;      //LL contains single ele.
+        delete temp;
+    }
+};
+
+int main() 
+{ 
+    Queue q; 
+	q.enQueue(10); 
+	q.enQueue(20); 
+	q.deQueue(); 
+	q.deQueue(); 
+	q.enQueue(30); 
+	q.enQueue(40); 
+	q.enQueue(50); 
+	q.deQueue(); 
+	cout << "Queue Front : " << (q.front)->data << endl; 
+	cout << "Queue Rear : " << (q.rear)->data; 
+}
+-------------------------------------------------------------------------------------
+Q22) Implement Stack using Queue
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+void QueueStack :: push(int x)			//using two queue
+{
+   q1.push(x);
+   while(!q2.empty())
+   {
+       q1.push(q2.front());
+       q2.pop();
+   }
+   swap(q1, q2);
+}
+
+
+int QueueStack :: pop()
+{
+    int ans;
+    if(q2.empty()) 
+    {
+        ans = -1;
+    }
+    else
+    {
+        ans = q2.front();
+        q2.pop();
+    }
+    return ans;      
+}
+-------------------------------------------------------------------------------------
+void QueueStack :: push(int x)			//using one queue
+{
+   q1.push(x);
+   int siz = q1.size() - 1;
+   while(siz--)
+   {
+       q1.push(q1.front());
+       q1.pop();
+   }
+}
+
+
+int QueueStack :: pop()
+{
+    int ans;
+    if(q1.empty()) 
+    {
+        ans = -1;
+    }
+    else
+    {
+        ans = q1.front();
+        q1.pop();
+    }
+    return ans;      
+}
+-------------------------------------------------------------------------------------
+Q23) 	Implement Stack & Queue using Deque
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+struct DQueNode 
+{
+	int value;
+	DQueNode* next;
+	DQueNode* prev;
+};
+
+class Deque 
+{
+private:
+
+	DQueNode* head;
+	DQueNode* tail;
+
+public:
+	Deque()
+	{
+		head = tail = NULL;
+	}
+
+	bool isEmpty()                  	//if list is empty
+	{
+		if (head == NULL)
+			return true;
+		return false;
+	}
+
+	int size()                          //count the number of nodes in list
+	{
+		if (!isEmpty()) 
+		{
+			DQueNode* temp = head;
+			int len = 0;
+			while(temp) 
+			{
+				len++;
+				temp = temp->next;
+			}
+			return len;
+		}
+		return 0;
+	}
+
+	void insert_first(int element)     //insert at the first position
+	{
+		DQueNode* temp = new DQueNode[sizeof(DQueNode)];        //allocating node of DQueNode type
+		temp->value = element;
+
+		if (head == NULL) 
+		{
+			head = tail = temp;
+			temp->next = temp->prev = NULL;
+		}
+		else 
+		{
+			head->prev = temp;
+			temp->next = head;
+			temp->prev = NULL;
+			head = temp;
+		}
+	}
+
+	void insert_last(int element)      //insert at last position of deque
+	{
+		DQueNode* temp = new DQueNode[sizeof(DQueNode)];        //allocating node of DQueNode type
+		temp->value = element;
+
+		if (head == NULL) 
+		{
+			head = tail = temp;
+			temp->next = temp->prev = NULL;
+		}
+		else 
+		{
+			tail->next = temp;
+			temp->next = NULL;
+			temp->prev = tail;
+			tail = temp;
+		}
+	}
+
+	void remove_first()              //remove element at the first position
+	{
+		if(!isEmpty()) 
+		{
+			DQueNode* temp = head;
+			head = head->next;
+			if(head) head->prev = NULL;
+			delete temp;
+			if(head == NULL) tail = NULL;
+			return;
+		}
+		cout << "List is Empty" << endl;
+	}
+
+
+	void remove_last()      	   //remove element at the last position
+	{
+		if (!isEmpty()) 
+		{
+			DQueNode* temp = tail;
+			tail = tail->prev;
+			if(tail) tail->next = NULL;
+			delete temp;
+			if(tail == NULL) head = NULL;
+			return;
+		}
+		cout << "List is Empty" << endl;
+	}
+
+	void display()                  //displays the elements in deque
+	{
+		if (!isEmpty()) 
+		{
+			DQueNode* temp = head;
+			while (temp) 
+			{
+				cout << temp->value << " ";
+				temp = temp->next;
+			}
+			cout << endl;
+			return;
+		}
+		cout << "List is Empty" << endl;
+	}
+};
+
+class Stack : public Deque                    //Class to implement stack using Deque
+{
+public:
+	void push(int element)
+	{
+		insert_last(element);
+	}
+
+	void pop()
+	{
+		remove_last();
+	}
+};
+
+
+class Queue : public Deque                      //class to implement queue using deque 
+{
+public:
+	void enqueue(int element)
+	{
+		insert_last(element);
+	}
+
+	void dequeue()
+	{
+		remove_first();
+	}
+};
+
+int main()                              //Driver Code
+{
+	Stack s;
+    	s.push(7);        
+	s.push(8);
+	cout << "Stack: ";
+	s.display();
+
+    	s.pop();
+	cout << "Stack: ";
+	s.display();
+
+	Queue q;
+	q.enqueue(12);
+	q.enqueue(13);
+	cout << "Queue: ";
+	q.display();
+
+	q.dequeue();
+	cout << "Queue: ";
+	q.display();
+
+	cout << "Size of Stack is " << s.size() << endl;
+	cout << "Size of Queue is " << q.size() << endl;
+	return 0;
+}
+
+op:-
+Stack: 7 8 
+Stack: 7 
+Queue: 12 13 
+Queue: 13 
+Size of Stack is 1
+Size of Queue is 1
+-------------------------------------------------------------------------------------
+Q24) Stack Permutations (Check if an array is stack permutation of other)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int isStackPermutation(int N,vector<int> &A,vector<int> &B)
+{
+    queue<int> q1, q2;
+    for(int i=0; i<N; i++)
+    {
+        q1.push(A[i]);
+        q2.push(B[i]);
+    }
+    
+    stack<int> s;
+    while(!q1.empty())
+    {
+        int x = q1.front();
+        q1.pop();
+        if(x == q2.front())
+        {
+            q2.pop();
+            while(!s.empty() && s.top() == q2.front())
+            {
+                s.pop();
+                q2.pop();
+            }
+        }
+        else
+        {
+            s.push(x);
+        }
+    }
+    return s.empty();
+}
+-------------------------------------------------------------------------------------
+Q25) Implement Queue using Stack
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>			//by using two stack
+using namespace std;
+
+struct Queue 
+{
+	stack<int> s1, s2;
+    	void enQueue(int x)
+	{
+		while(!s1.empty()) 
+		{
+			s2.push(s1.top());
+			s1.pop();
+		}
+
+		s1.push(x);
+		while(!s2.empty()) 
+		{
+			s1.push(s2.top());
+			s2.pop();
+		}
+	}
+
+	int deQueue()
+	{
+		if(s1.empty()) 
+		{
+			cout << "Q is Empty --> ";
+			return -1;
+		}
+		int x = s1.top();
+		s1.pop();
+		return x;
+	}
+};
+
+int main()
+{
+	Queue q;
+	q.enQueue(1);
+	q.enQueue(2);
+	q.enQueue(3);
+
+	cout << q.deQueue() << '\n';
+	cout << q.deQueue() << '\n';
+	cout << q.deQueue() << '\n';
+	cout << q.deQueue() << '\n';
+
+	return 0;
+}
+----------------------------------------------------------------------------------------
+void StackQueue :: push(int x)				//by using one stack
+{
+    s1.push(x);
+}
+
+int StackQueue :: pop()
+{
+    if(s1.empty()) return -1;
+    int x = s1.top();
+    s1.pop();
+    if(s1.empty())
+    {
+        return x;
+    }
+    else
+    {
+        int y = pop();
+        s1.push(x);
+        return y;
+    }
+}
+-------------------------------------------------------------------------------------
+Q26) Circular Queue
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include<bits/stdc++.h>
+using namespace std;
+
+class Queue
+{
+	int rear, front;
+	int size;
+	int *arr;
+public:
+	Queue(int s)
+	{
+	    front = rear = -1;
+	    size = s;
+	    arr = new int[s];
+	}
+
+	void enQueue(int value);
+	int deQueue();
+	void displayQueue();
+};
+
+void Queue::enQueue(int value)
+{
+	if(front == (rear+1)%size) return;              //full Circular Queue
+	else if(front == -1 && rear == -1)              //empty Circular queue
+	{
+	    front = rear = 0;
+	    arr[front] = value;
+	}
+	else
+	{
+	    rear = (rear+1)%size;
+	    arr[rear] = value;
+	}
+}
+
+int Queue::deQueue()
+{
+	if(front == -1) return -1;                      //empty Circular queue
+	else if(front == 0 && rear == 0)                //Circular queue contains one ele.
+	{
+	    int x = arr[front];
+	    front--;
+	    rear--;
+	    return x;
+	}
+	else
+	{
+	    int x = arr[front];
+	    front = (front+1)%size;
+	    return x;
+	}
+}
+
+void Queue::displayQueue()
+{
+	if(front == -1) return;
+
+	cout << "\nElements in Circular Queue are: ";
+	if (rear >= front)
+	{
+		for(int i=front; i<=rear; i++)
+			cout << arr[i] << " ";
+	}
+	else
+	{
+		for(int i=front; i<size; i++)
+			cout << arr[i] << " ";
+
+		for(int i=0; i<=rear; i++)
+			cout << arr[i] << " ";
+	}
+}
+
+
+int main()
+{
+	Queue q(5);
+	q.enQueue(14);
+	q.enQueue(22);
+	q.enQueue(13);
+	q.enQueue(-6);
+	q.displayQueue();
+
+	printf("\nDeleted value = %d", q.deQueue());
+	printf("\nDeleted value = %d", q.deQueue());
+    	q.displayQueue();
+
+	q.enQueue(9);
+	q.enQueue(20);
+	q.enQueue(5);
+    	q.displayQueue();
+
+	q.enQueue(50);				//full Circular Queue
+	q.displayQueue();
+	return 0;
+}
+-------------------------------------------------------------------------------------
+Q27) Reverse a Queue using recursion
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+void solve(queue<int> &q)
+{
+    if(!q.empty())
+    {
+        int x = q.front();
+        q.pop();
+        solve(q);
+        q.push(x);
+    }
+}
+
+queue<int> rev(queue<int> q)
+{
+    solve(q);
+    return q;
+}
+-------------------------------------------------------------------------------------
+Q28) 	LRU Cache Implementationa
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class LRUCache
+{
+    private:
+
+    public:
+    //Constructor for initializing the cache capacity with the given value.
+    struct Node
+    {
+        int ind;
+        int data;
+        Node *prev;
+        Node *next;
+        Node(int x, int y)
+        {
+            ind = x;
+            data = y;
+        }
+    };
+    
+    Node *head = new Node(-1,-1);
+    Node *tail = new Node(-1,-1);
+    int capacity;
+    unordered_map<int, Node*> mp;
+    
+    LRUCache(int cap)
+    {
+        capacity = cap;
+        head->next = tail;
+        tail->prev = head;
+    }
+    
+    void addnewNode(Node *newnode)
+    {
+        Node *temp = head->next;
+        head->next = newnode;
+        newnode->prev = head;
+        newnode->next = temp;
+        temp->prev = newnode;
+    }
+    
+    void deleteNode(Node *delnode)
+    {
+        delnode->prev->next = delnode->next;
+        delnode->next->prev = delnode->prev;
+    }
+   
+    int get(int key)                     //Function to return value corresponding to the key.
+    {
+        if(mp.find(key) != mp.end())
+        {
+            Node *ansnode = mp[key];
+            int ans = ansnode->data;
+            mp.erase(key);
+            deleteNode(ansnode);
+            addnewNode(ansnode);
+            mp[key] = head->next;
+            return ans;
+        }
+        return -1;
+    }
+    
+    void set(int key, int value)        //Function for storing key-value pair.
+    {
+        if(mp.find(key) != mp.end())        //key  is already present
+        {
+            Node *ansnode = mp[key];
+            mp.erase(key);
+            deleteNode(ansnode);
+        }
+        else if(mp.size() == capacity)      //cap is full
+        {
+            mp.erase(tail->prev->ind);
+            deleteNode(tail->prev);
+        }
+       
+        Node *newnode = new Node(key,value);
+        addnewNode(newnode);
+        mp[key] = head->next;
+    }
+};
+-------------------------------------------------------------------------------------
+Q29) Reverse First K elements of Queue
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+void solve(queue<int> &q, queue<int> &enq, int k)
+{
+    if(!q.empty() && k>0)
+    {
+        int x = q.front();
+        q.pop();
+        k--;
+        solve(q, enq, k);
+        enq.push(x);
+    }
+}
+
+queue<int> modifyQueue(queue<int> q, int k) 
+{
+    queue<int> enq;
+    solve(q,enq, k);
+    while(!q.empty())
+    {
+        enq.push(q.front());
+        q.pop();
+    }
+    return enq;
+}
+-------------------------------------------------------------------------------------
+Q30) Interleave the first half of the queue with second half
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+void interLeaveQueue(queue<int> &q)
+{
+    stack<int> s;
+    int n = q.size()/2;
+    for(int i=0; i<n; i++)
+    {
+        s.push(q.front());
+        q.pop();
+    }
+    while(!s.empty())
+    {
+        q.push(s.top());
+        s.pop();
+    }
+    for(int i=0; i<n; i++)
+    {
+        q.push(q.front());
+        q.pop();
+    }
+    for(int i=0; i<n; i++)
+    {
+        s.push(q.front());
+        q.pop();
+    }
+    
+    while(!s.empty())
+    {
+        q.push(s.top());
+        s.pop();
+        q.push(q.front());
+        q.pop();
+    }
+}
+
+int main()
+{
+	queue<int> q;
+	q.push(11);
+	q.push(12);
+	q.push(13);
+	q.push(14);
+	q.push(15);
+	q.push(16);
+	q.push(17);
+	q.push(18);
+	q.push(19);
+	q.push(20);
+	interLeaveQueue(q);
+	int length = q.size();
+	for(int i=0; i<length; i++) 
+	{
+		cout << q.front() << " ";
+		q.pop();
+	}
+	return 0;
+}
+-------------------------------------------------------------------------------------
+void interLeaveQueue(queue<int> &q)		//other aproach
+{
+    stack<int> s1;
+    stack<int> s2;
+    int n = q.size()/2;
+    for(int i=0; i<n; i++)
+    {
+        s1.push(q.front());
+        q.pop();
+    }
+    while(!s1.empty())
+    {
+        s2.push(s1.top());
+        s1.pop();
+    }
+    
+    while(!s2.empty())
+    {
+        q.push(s2.top());
+        s2.pop();
+        q.push(q.front());
+        q.pop();
+    }
+}
+--------------------------------------------------------------------------------------
+Q31) Find the first circular tour that visits all Petrol Pumps
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int tour(petrolPump p[],int n)
+{
+    int ind = 0;
+    int left = 0;
+    int need = 0;
+    
+    for(int i=0; i<n; i++)
+    {
+        left = left + p[i].petrol - p[i].distance;
+        if(left < 0)
+        {
+            ind = i + 1;
+            need = need + left;
+            left = 0;
+        }
+    }
+    
+    if(left + need >= 0) return ind;
+    else return -1;
+}
+--------------------------------------------------------------------------------------
+Q32) 	Minimum time required to rot all oranges
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int orangesRotting(vector<vector<int>>& grid) 
+{
+    queue<pair<int, int>> q;
+    int r = grid.size();
+    int c = grid[0].size();
+    for(int i=0; i<r; i++)
+    {
+        for(int j=0; j<c; j++)
+        {
+            if(grid[i][j] == 2)
+                q.push({i,j});
+        }
+    }
+    int count = 0;
+    q.push({-1,-1});
+    
+    while(!q.empty())
+    {
+        int i = q.front().first;
+        int j = q.front().second;
+        if(i==-1 && j==-1 && q.size()==1)
+        {
+            q.pop();
+            break;
+        }
+        else if(i==-1 && j==-1 && q.size()>1)
+        {
+            count++;
+            q.pop();
+            q.push({-1,-1});
+        }
+        else
+        {
+            /*all below statements are if type bcz orrang rotten s
+            imaltanously top, bottom, left, right*/
+            if(i-1 >= 0 && grid[i-1][j] == 1)           //top
+            {
+                grid[i-1][j] = 2;
+                q.push({i-1,j});
+            }
+            if(i+1 < r && grid[i+1][j] == 1)            //bottom
+            {
+                grid[i+1][j] = 2;
+                q.push({i+1,j});
+            }
+            if(j-1 >= 0 && grid[i][j-1] == 1)           //left
+            {
+                grid[i][j-1] = 2;
+                q.push({i,j-1});
+            }
+            if(j+1 < c && grid[i][j+1] == 1)            //right
+            {
+                grid[i][j+1] = 2;
+                q.push({i,j+1});
+            }
+            q.pop();
+        }
+    }
+    
+    for(int i=0; i<r; i++)
+    {
+        for(int j=0; j<c; j++)
+        {
+            if(grid[i][j] == 1)
+                return -1;
+        }
+    }
+    return count;
+}
+--------------------------------------------------------------------------------------
+Q33) Distance of nearest cell having 1
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vector<vector<int>>nearest(vector<vector<int>>grid)
+{
+	int r = grid.size();
+	int c = grid[0].size();
+	
+	vector<vector<int>> ans(r,vector<int>(c, INT_MAX));
+	
+	queue<pair<int, int>> q;
+	
+	for(int i=0; i<r; i++)
+	{
+	    for(int j=0; j<c; j++)
+	    {
+	        if(grid[i][j] == 1)
+	        {
+	            ans[i][j] = 0;
+	            q.push({i,j});
+	        }
+	    }
+	}
+	
+	while(q.empty()==false)
+	{
+	    int i = q.front().first;
+	    int j = q.front().second;
+	    
+	    if(i-1 >= 0 && ans[i][j]+1 < ans[i-1][j])           //top
+	    {
+	        ans[i-1][j] = ans[i][j]+1;
+	        q.push({i-1,j});
+	    }
+	    if(i+1 < r && ans[i][j]+1 < ans[i+1][j])            //bottom
+	    {
+	        ans[i+1][j] = ans[i][j]+1;
+	        q.push({i+1,j});
+	    }
+	    if(j-1 >= 0 && ans[i][j]+1 < ans[i][j-1])           //left
+	    {
+	        ans[i][j-1] = ans[i][j]+1;
+	        q.push({i,j-1});
+	    }
+	    if(j+1 < c && ans[i][j]+1 < ans[i][j+1])            //right
+	    {
+	        ans[i][j+1] = ans[i][j]+1;
+	        q.push({i,j+1});
+	    }
+	    q.pop();
+	}
+	return ans;
+}
+--------------------------------------------------------------------------------------
+Q34) Game with String
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int minValue(string s, int k)
+{
+    unordered_map<char, int> mp;
+    for(int i=0; i<s.size(); i++)
+    {
+        mp[s[i]]++;
+    }
+    
+    priority_queue<int> pq;
+    for(auto x : mp)
+    {
+        pq.push(x.second);
+    }
+    
+    while(k)
+    {
+        int x = pq.top();
+        pq.pop();
+        x--;
+        pq.push(x);
+        k--;
+    }
+    
+    int sum = 0;
+    while(!pq.empty())
+    {
+        int d = pq.top();
+        pq.pop();
+        sum = sum + d*d; 
+    }
+    return sum;
+}
+--------------------------------------------------------------------------------------
+Q35) First negative integer in every window of size k
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>				//Naive approach
+using namespace std;
+
+void printFirstNegativeInteger(int arr[], int n, int k)
+{
+	for (int i=0; i<n-k+1; i++)		
+	{
+		bool flag = false;
+
+		/*if a negative integer is found, then it is the first negative integer for
+        	current window. Print it, set the flag and break*/
+
+        	for (int j=0; j<k; j++)
+		{
+			if(arr[i+j] < 0)
+			{
+				cout << arr[i+j] << " ";
+				flag = true;
+				break;
+			}
+		}
+		
+		if(!flag) cout << "0" << " ";
+	}
+}
+
+int main()
+{
+	int arr[] = {12, 1, 7, -8, -15, 30, 16, 28};
+	int n = sizeof(arr)/sizeof(arr[0]);
+	int k = 3;
+	printFirstNegativeInteger(arr, n, k);
+	return 0;
+}
+--------------------------------------------------------------------------------------
+Efficient approach
+""""""""""""""""""
+vector<long long> printFirstNegativeInteger(long long int A[], long long int N, long long int K) 
+{
+    vector<long long int> v;
+    deque<long long int> dq;
+    for(int i=0; i<K; i++)
+    {
+        if(A[i] < 0) dq.push_back(A[i]);
+    }
+    
+    if(dq.size() == 0) v.push_back(0);
+    else v.push_back(dq.front());
+    
+    long long int j=0;
+    for(long long int i=K; i<N; i++)
+    {
+        if(A[j] == dq.front())
+        {
+            dq.pop_front();
+            j++;
+        }
+        else 
+        {
+            j++;
+        }
+        
+        if(A[i] < 0) dq.push_back(A[i]);
+        
+        if(dq.size() == 0) v.push_back(0);
+        else v.push_back(dq.front());
+    }
+    return v;
+}
+--------------------------------------------------------------------------------------
+Q36) Check if all levels of two trees are anagrams or not
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+bool areAnagrams(Node *root1, Node *root2)
+{
+    if(!root1 && !root2) return true;
+    if(!root1 || !root2) return false;
+    queue<Node*> q1, q2;
+    vector<int> v1, v2;
+    q1.push(root1);
+    q2.push(root2);
+    
+    while(1)
+    {
+        int n1 = q1.size();
+        int n2 = q2.size();
+        
+        if(n1 != n2) return false;
+        if(n1 == 0) break;
+        
+        while(n1>0)
+        {
+            n1--;
+            Node *a = q1.front();
+            Node *b = q2.front();
+            q1.pop();
+            q2.pop();
+            v1.push_back(a->data);
+            v2.push_back(b->data);
+            
+            if(a->left) q1.push(a->left);
+            if(a->right) q1.push(a->right);
+            if(b->left) q2.push(b->left);
+            if(b->right) q2.push(b->right);
+        }
+        
+        sort(v1.begin(), v1.end());
+        sort(v2.begin(), v2.end());
+        if(v1 != v2) return false;
+    }
+    return true;
+}
+--------------------------------------------------------------------------------------

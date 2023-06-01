@@ -1,0 +1,982 @@
+                    		   ******Graph******
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q1) Create a Graph, print it
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>					//Adjacency list:- efficient
+using namespace std;
+
+int main()
+{
+    int v, e;
+    cin >> v >> e;
+    vector<int> graph[v+1];				//vector
+    for(int i=0; i<e; i++)
+    {
+        int x, y;
+        cin >> x >> y;
+        graph[x].push_back(y);
+        graph[y].push_back(x);
+    }
+    
+    for(int i=1; i<=v; i++)
+    {
+        cout << i << "--->";
+        for(int j=0; j<graph[i].size(); j++)
+        {
+            cout << graph[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+} 
+
+i/p:-
+6 5		//v e
+1 5		//e1
+1 2		//e2
+2 3		//e3
+3 4		//e4
+3 6		//e5
+o/p:-
+1--->5 2 
+2--->1 3 
+3--->2 4 6 
+4--->3 
+5--->1 
+6--->3                  	
+---------------------------------------------------------------------------------------------
+#include <bits/stdc++.h>				     //adjacency matrix:- brute force
+using namespace std;
+
+int main()
+{
+    int v, e;
+    cin >> v >> e;
+    int graph[v+1][v+1];				//matrix
+    for(int i=1; i<=v; i++)
+    {
+        for(int j=1; j<=v; j++)
+        {
+            graph[i][j] = 0;
+        }
+    }
+
+    for(int i=0; i<e; i++)				//accor to edges
+    {
+        int x, y;
+        cin >> x >> y;
+        graph[x][y] = 1;
+        graph[y][x] = 1;
+    }
+    
+    for(int i=1; i<=v; i++)
+    {
+        cout << i << "--->";
+        for(int j=1; j<=v; j++)
+        {
+            cout << graph[i][j] << " ";
+        }
+        cout << endl;
+    }
+    return 0;
+}
+
+i/p:-
+6 5		//v e
+1 5		//e1
+1 2		//e2
+2 3		//e3
+3 4		//e4
+3 6		//e5
+o/p:-
+1--->0 1 0 0 1 0 
+2--->1 0 1 0 0 0 
+3--->0 1 0 1 0 1 
+4--->0 0 1 0 0 0 
+5--->1 0 0 0 0 0 
+6--->0 0 1 0 0 0 
+---------------------------------------------------------------------------------------------
+Q2) Print adjacency list
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+    // Function to return the adjacency list for each vertex.
+    vector<vector<int>> printGraph(int V, vector<int> adj[]) 
+    {
+        vector<vector<int>> ans;
+
+        for(int i=0; i<V; i++)
+        {   
+            vector<int> temp;
+            temp.push_back(i);					//firstly push vertex 
+            for(int j=0; j<adj[i].size(); j++)			//push all adjacent of vertex
+            {
+                temp.push_back(adj[i][j]);
+            }
+            ans.push_back(temp);
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q3) BFS of graph
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+    // Function to return Breadth First Traversal of given graph.
+    vector<int> bfsOfGraph(int V, vector<int> adj[]) 
+    {
+        vector<int> ans;
+        queue<int> q;
+        vector<int> vis(V, 0);
+        q.push(0);
+        vis[0] = 1;
+        
+        while(!q.empty())
+        {
+            int x = q.front();
+            q.pop();
+            ans.push_back(x);
+            for(auto i : adj[x])
+            {
+                if(!vis[i])
+                {
+                    vis[i] = 1;
+                    q.push(i);
+                }
+            }
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q4) DFS of Graph
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+    
+    vector<int> ans;
+    void solve(int source, vector<int> adj[], vector<int> &vis)		//helper function
+    {
+        vis[source] = 1;
+        ans.push_back(source);
+        
+        for(auto x : adj[source])
+        {
+            if(!vis[x])
+            {
+                solve(x, adj, vis);
+            }
+        }
+    }
+    
+    vector<int> dfsOfGraph(int V, vector<int> adj[]) 			//main function
+    {
+        ans.clear();
+        vector<int> vis(V, 0);
+        solve(0, adj, vis);
+        
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q5) Detect cycle in a directed graph (**by DFS)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+
+    bool solve(int source, vector<int> &vis, vector<int> &order, vector<int> adj[])     //helper fun
+    {
+        vis[source] = 1;
+        order[source] = 1;
+        for(auto x : adj[source])
+        {
+            if(!vis[x])
+            {
+                bool conf = solve(x, vis, order, adj);
+                if(conf == true) return true;
+            }
+            else if(order[x] == true) return true;		//--->for self loop OR other path.
+        }
+        order[source] = 0;
+        return false;
+    }
+    
+    bool isCyclic(int V, vector<int> adj[])                             		//main fun
+    {
+        vector<int> vis(V, 0);
+        vector<int> order(V, 0);
+        for(int i=0; i<V; i++)
+        {
+            if(!vis[i])
+            {
+                bool c = solve(i, vis, order, adj);
+                if(c == true) return true;
+            }
+        }
+        return false;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q6) Detect cycle in a undirected graph
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+
+    bool solve(int source, int par, vector<int> &vis, vector<int> adj[])	//helper fun
+    {
+        vis[source] = 1;
+        for(auto x : adj[source])
+        {
+            if(!vis[x])
+            {
+                bool conf = solve(x, source, vis, adj);
+                if(conf == true) return true;
+            }
+            else if(x != par) return true;                          //cycle found
+        }
+        return false;
+    }
+    
+    bool isCycle(int V, vector<int> adj[]) 					//main fun
+    {
+        vector<int> vis(V, 0);
+        for(int i=0; i<V; i++)
+        {
+            if(!vis[i])
+            {
+                bool c = solve(i, -1, vis, adj);
+                if(c == true) return true;
+            }
+        }
+        return false;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q7) Steps by Knight
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+    public:
+    //Function to find out minimum steps Knight needs to reach target position.
+	int minStepToReachTarget(vector<int> &KnightPos, vector<int> &TargetPos, int n)
+	{
+           int row[] = {-1, -2, -2, -1, 1, 2, 2, 1};
+           int col[] = {-2, -1, 1, 2, 2, 1, -1, -2};
+           
+           int x1 = KnightPos[0] - 1;
+           int y1 = KnightPos[1] - 1;
+           int x2 = TargetPos[0] - 1;
+           int y2 = TargetPos[1] - 1;
+           
+           if(x1==x2 && y1==y2) return 0;				//base condition
+           
+           queue<pair<pair<int, int>,int> > q;
+           int dist = 0;
+           
+           vector<vector<int>> vis(n, vector<int> (n, 0));		//visited matrix all 0 initially
+           q.push({{x1, y1}, dist});
+           vis[x1][y1] = 1;
+           
+           while(!q.empty())
+           {
+               auto fr = q.front();
+               int i = fr.first.first;
+               int j = fr.first.second;
+               int d = fr.second;
+               
+               if(i==x2 && j==y2) return d;
+               q.pop();
+               
+               for(int k=0; k<8; k++)
+               {
+                   if(i+row[k] >= 0 && i+row[k] < n && 
+		      j+col[k] >= 0 && j+col[k] < n && 
+		      vis[i+row[k]][j+col[k]] == 0)
+                   {
+                       vis[i+row[k]][j+col[k]] = 1;
+                       q.push({{i+row[k], j+col[k]}, d+1});
+                   }
+               }
+           }
+           return -1;
+	}
+};
+---------------------------------------------------------------------------------------------
+Q8) flood fill algo
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							    //Leetcodse efficient sol
+{
+public:
+    void DFS(int i, int j, vector<vector<int>>& image, vector<vector<int>>& vis, int r, int c, int oldC, int newC)
+    {
+        if(i<0 || i>=r || j<0 || j>=c) return;
+        if(vis[i][j] == 1 || image[i][j] != oldC) return;
+        
+        vis[i][j] = 1;
+        image[i][j] = newC;
+        
+        DFS(i+1, j, image, vis, r, c, oldC, newC);
+        DFS(i-1, j, image, vis, r, c, oldC, newC);
+        DFS(i, j+1, image, vis, r, c, oldC, newC);
+        DFS(i, j-1, image, vis, r, c, oldC, newC);
+    }
+    
+    vector<vector<int>> floodFill(vector<vector<int>>& image, int sr, int sc, int newC) 	//main fun
+    {
+        int r = image.size();
+        int c = image[0].size();
+        vector<vector<int>> vis(r, vector<int> (c, 0));
+        int oldC = image[sr][sc];
+        DFS(sr, sc, image, vis, r, c, oldC, newC);
+        return image;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q9) Number of Operations to Make Network Connected
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							     //Leetcode efficient sol
+{
+public:
+    void DFS(int source, vector<int> &vis, vector<int> graph[])         //hepler fun
+    {
+        vis[source] = 1;
+        for(auto x : graph[source])
+        {
+            if(!vis[x])
+                DFS(x, vis, graph);
+        }     
+    }
+    
+    int makeConnected(int n, vector<vector<int>>& edges)                //main fun
+    {
+        vector<int> graph[n];
+        int m = edges.size();
+        if(m < n-1) return -1;
+        
+        for(int i=0; i<m; i++)
+        {
+            graph[edges[i][0]].push_back(edges[i][1]);
+            graph[edges[i][1]].push_back(edges[i][0]);
+        }
+        
+        vector<int> vis(n, 0);
+        int c = 0;
+        for(int i=0; i<n; i++)
+        {
+            if(!vis[i])
+            {
+                c++;
+                DFS(i, vis, graph);
+            }
+        }
+        return c-1;
+        
+    }
+};
+---------------------------------------------------------------------------------------------
+Q10) Word Ladder
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							     //Leetcode efficient sol
+{
+public:
+    int ladderLength(string start, string target, vector<string>& wordList) 
+    {
+        queue<string> q;
+        q.push(start);
+        int wsize = start.size();
+        
+        unordered_set<string> word;					//bcz of reducing T.C.
+        for(int i=0; i<wordList.size(); i++)
+        {
+            word.insert(wordList[i]);
+        }
+        
+        if(word.find(target) == word.end()) return 0;           	//if transformation not possible
+        int ans = 0;
+        while(!q.empty())
+        {
+            ans++;
+            int qlen = q.size();
+            for(int i=0; i<qlen; i++)
+            {
+                string x = q.front();
+                q.pop();
+                for(int j=0; j<wsize; j++)
+                {
+                    char org = x[j];
+                    for(char ch='a'; ch<='z'; ch++)
+                    {
+                        x[j] = ch;
+                        if(x == target) return ans+1;               	//reach  to target string  
+                        if(word.find(x) == word.end()) continue;
+                        
+                        word.erase(x);
+                        q.push(x);
+                    }
+                    x[j] = org;
+                }
+            }  
+        }
+        return 0;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q11) Implementing Dijkstra Algorithm
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    //Function to find the shortest distance of all the vertices
+    //from the source vertex S.
+
+    vector <int> dijkstra(int V, vector<vector<int>> adj[], int S)
+    {
+        priority_queue<pair<int,int>, vector<pair<int, int> >, greater<pair<int, int>> > pq;	//min_heap
+        vector<int> cost(V,INT_MAX);
+        cost[S] = 0;
+        pq.push({S, 0});
+        while(!pq.empty())
+        {
+            int node = pq.top().first;
+            int dist = pq.top().second;
+            pq.pop();
+            
+            for(auto x:adj[node])
+            {
+                int next = x[0];
+                int wt = x[1];
+                if(cost[next] > cost[node] + wt)
+                {
+                    cost[next] = cost[node] + wt;
+                    pq.push({next, cost[next]});
+                }
+            }
+        }
+        return cost;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q12) Topological sort 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg efficient sol by BFS
+{
+	public:
+	//Function to return list containing vertices in Topological order. 
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> ans;
+	    queue<int> q;                                       //for BFS
+	    vector<int> indeg(V, 0);                            //initially indegree 0 for all 
+	    
+	    for(int i=0; i<V; i++)                              //update indeg                           
+	    {
+	        for(auto x:adj[i])
+	        {
+	            indeg[x]++;
+	        }
+	    }
+	    
+	    for(int i=0; i<V; i++)                              //push ver. in q whose indeg 0
+	    {
+	        if(indeg[i] == 0) q.push(i);
+	    }
+	    
+	    while(!q.empty())                                   //BFS code
+	    {
+	        int p = q.front();
+	        q.pop();
+	        ans.push_back(p);
+	        for(auto x:adj[p])				//indeg update evry time 
+	        {
+	            indeg[x]--;
+	            if(indeg[x] == 0) q.push(x);
+	        }
+	    }
+	    return ans;
+	}
+};
+---------------------------------------------------------------------------------------------
+class Solution							//gfg efficient sol by DFS
+{
+	public:
+	//Function to return list containing vertices in Topological order.
+	void DFS(int node, vector<int> adj[], vector<int> &vis, stack<int> &st)
+	{
+	    vis[node] = 1;
+	    for(auto x : adj[node])
+	    {
+	        if(!vis[x])
+	            DFS(x, adj, vis, st);
+	    }
+	    st.push(node);
+	}
+	
+	vector<int> topoSort(int V, vector<int> adj[]) 
+	{
+	    vector<int> ans;
+	    vector<int> vis(V, 0);
+	    stack<int> st;
+	    
+	    for(int i=0; i<V; i++)
+	    {
+	        if(!vis[i])
+	        {
+	            DFS(i, adj, vis, st);
+	        }
+	    }
+	    
+	    while(!st.empty())
+	    {
+	        ans.push_back(st.top());
+	        st.pop();
+	    }
+	    return ans;
+	}
+};
+---------------------------------------------------------------------------------------------
+Q5-II) Detect cycle in a directed graph (**by BFS use topo sort)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol 
+{
+  public:
+    
+    bool isCyclic(int V, vector<int> adj[])                             //main fun
+    {
+            queue<int> q;                                       //for BFS
+	    vector<int> indeg(V, 0);                            //initially indegree 0 for all 
+	    
+	    for(int i=0; i<V; i++)                              //update indeg                           
+	    {
+	        for(auto x:adj[i])
+	        {
+	            indeg[x]++;
+	        }
+	    }
+	    
+	    for(int i=0; i<V; i++)                              //push ver. in q whose indeg 0
+	    {
+	        if(indeg[i] == 0) q.push(i);
+	    }
+	    
+	    int c = q.size();					//c is #of ver. whose indeg 0
+	    while(!q.empty())                                   //BFS code
+	    {
+	        int p = q.front();
+	        q.pop();
+
+	        for(auto x:adj[p])				//indeg update evry time 
+	        {
+	            indeg[x]--;
+	            if(indeg[x] == 0) 
+	            {
+	                q.push(x);
+	                c++;
+	            }
+	        }
+	    }
+	    if(c == V) return false;				//if all ver. whose indeg 0
+	    else return true;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q13) Minimum time taken by each job to be completed given by a Directed Acyclic Graph
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+        vector<int> minimumTime(int V,vector<vector<int>> &edges,int E)
+        {
+            vector<int> ans(V+1, 0);
+            queue<int> q;
+            vector<int> indeg(V+1,0);
+            
+            vector<int> adj[V+1];				//create adj list of all ver. & find indeg
+            for(int i=0; i<E; i++)
+            {
+                adj[edges[i][0]].push_back(edges[i][1]);
+                indeg[edges[i][1]]++;
+            }
+	    
+    	    for(int i=1; i<=V; i++)                              //push ver. in q whose indeg 0 & its ans to 1
+    	    {
+    	        if(indeg[i] == 0) 
+    	        {
+    	            ans[i] = 1;
+    	            q.push(i);
+    	        }
+    	    }
+    	    
+    	    while(!q.empty())
+    	    {
+    	        int p = q.front();
+    	        q.pop();
+    	        for(auto x : adj[p])
+    	        {
+    	            indeg[x]--;
+    	            if(indeg[x] == 0)
+    	            {
+    	                ans[x] = ans[p] + 1;
+    	                q.push(x);
+    	            }
+    	        }
+    	    }
+    	    
+    	    vector<int> final_ans;                                  //delete first ele.
+    	    for(int i=1; i<ans.size(); i++)
+    	        final_ans.push_back(ans[i]);
+    	        
+    	    return final_ans;
+        }
+};
+---------------------------------------------------------------------------------------------
+Q14) Prerequisite Tasks
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+public:
+	bool isPossible(int V, vector<pair<int, int> > &preR) 
+	{
+	    queue<int> q;                                       //for BFS
+	    vector<int> indeg(V, 0);                            //initially indegree 0 for all 
+	    vector<int> adj[V];					//make adj list
+	    for(auto x : preR)
+	    {
+	        adj[x.second].push_back(x.first);
+	    }
+	    
+	    for(int i=0; i<V; i++)                              //update indeg                           
+	    {
+	        for(auto x:adj[i])
+	        {
+	            indeg[x]++;
+	        }
+	    }
+	    
+	    for(int i=0; i<V; i++)                              //push ver. in q whose indeg 0
+	    {
+	        if(indeg[i] == 0) q.push(i);
+	    }
+	    
+	    int c = q.size();					                //c is #of ver. whose indeg 0
+	    while(!q.empty())                                   //BFS code
+	    {
+	        int p = q.front();
+	        q.pop();
+
+	        for(auto x:adj[p])				//indeg update evry time 
+	        {
+	            indeg[x]--;
+	            if(indeg[x] == 0) 
+	            {
+	                q.push(x);
+	                c++;
+	            }
+	        }
+	    }
+	    if(c == V) return true;				//cycle not found
+	    else return false;                  //cycle found
+	}
+};
+---------------------------------------------------------------------------------------------
+Q15) Function to find the number of islands.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+  public:
+    
+    void DFS(int i, int j, vector<vector<char>> &grid, vector<vector<int>> &vis, int r, int c)
+    {
+        if(i<0 || i>=r || j<0 || j>=c || vis[i][j] == 1 || grid[i][j] == '0')
+            return;
+            
+        vis[i][j] = 1;
+        DFS(i-1, j, grid, vis, r, c);
+        DFS(i, j-1, grid, vis, r, c);
+        DFS(i+1, j, grid, vis, r, c);
+        DFS(i, j+1, grid, vis, r, c);
+        DFS(i-1, j-1, grid, vis, r, c);
+        DFS(i+1, j+1, grid, vis, r, c);
+        DFS(i-1, j+1, grid, vis, r, c);
+        DFS(i+1, j-1, grid, vis, r, c);
+    }
+    
+    int numIslands(vector<vector<char>>& grid)                              //main fun
+    {
+        int r = grid.size();
+        int c = grid[0].size();
+        
+        int ans = 0;
+        vector<vector<int>> vis(r, vector<int>(c, 0) );
+        for(int i=0; i<r; i++)
+        {
+            for(int j=0; j<c; j++)
+            {
+                if(!vis[i][j] && grid[i][j] == '1')
+                {
+                    DFS(i, j, grid, vis, r, c);
+                    ans++;
+                }
+            }
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q16) Alien Dictionary
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    stack<char> st;
+    void DFS(int source, vector<vector<int> > &graph, vector<int> &vis)     		//helper fun
+    {
+        vis[source] = 1;
+        for(auto x : graph[source])
+        {
+            if(!vis[x])
+                DFS(x, graph, vis);
+        }
+        st.push(source + 'a');                                      //topo sort by DFS
+    }
+    
+
+    string findOrder(string dict[], int n, int k)                           		//main fun
+    {
+        vector<vector<int> > graph(k);
+        for(int i=0; i<n-1; i++)
+        {
+            string w1 = dict[i];
+            string w2 = dict[i+1];
+            
+            for(int j=0; j<min(w1.size(), w2.size()); j++)          //making graph
+            {
+                if(w1[j] != w2[j])
+                {
+                    graph[w1[j] - 'a'].push_back(w2[j] - 'a');
+                    break;
+                }
+            }
+        }
+        
+        string ans;                                                 //dfs calling
+        vector<int> vis(k, 0);
+        for(int i=0; i<k; i++)
+        {
+            if(!vis[i])
+                DFS(i, graph, vis);
+        }
+        
+        while(!st.empty())                                          //for ans storing from stack
+        {
+            ans = ans + st.top();
+            st.pop();
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q17) Minimum Spanning Tree						    (**Prim's Algo)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+	public:
+	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+	int minver(vector<int> &weight, vector<bool> &vis)                 //helper fun
+	{
+	    int v;
+	    int min_wt = INT_MAX;
+	    for(int i=0; i<vis.size(); i++)
+	    {
+	        if(!vis[i] && weight[i] < min_wt)
+	        {
+	            min_wt = weight[i];
+	            v = i;
+	        }
+	    }
+	    return v;
+	}
+	
+    int spanningTree(int V, vector<vector<int>> adj[])                   //main fun
+    {
+        vector<int> weight(V, INT_MAX);
+        vector<bool> vis(V, false);
+        //vector<int> parent(V);			   //this is for writting min spanning tree
+        //parent[0] = -1;
+        weight[0] = 0;
+        
+        for(int i=0; i<V-1; i++)
+        {
+            int U = minver(weight, vis);
+            vis[U] = true;
+            
+            for(auto x : adj[U])
+            {
+                int nod = x[0];                             //node
+                int wt = x[1];                              //edge_wt
+                if(!vis[nod] && wt < weight[nod])
+                {
+                    weight[nod] = wt;
+                    //parent[nod] = U;
+                }
+            }
+        }
+        
+        int ans = 0;
+        for(int i=0; i<V; i++)
+            ans = ans + weight[i];
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q18) Kruskal's Algorithm
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <iostream>
+#include<bits/stdc++.h>
+using namespace std;
+
+
+struct Node
+{
+    int parent;
+    int rank;
+};
+
+struct Edge
+{
+    int from;
+    int to;
+    int weight;
+};
+
+bool compare(Edge a, Edge b)
+{
+    return a.weight < b.weight;
+}
+
+int FIND(int a, vector<Node> &dsfu)
+{
+    if(dsfu[a].parent ==-1)
+    {
+        return a;
+    }
+    return dsfu[a].parent = FIND(dsfu[a].parent, dsfu);
+}
+
+
+void UNION(int x,int y, vector<Node> &dsfu)
+{
+   
+    if(dsfu[x].rank<dsfu[y].rank)
+    {
+        dsfu[y].parent = x;
+    }
+    else if(dsfu[y].rank<dsfu[x].rank)
+    {
+        dsfu[x].parent = y;
+    }
+    else
+    {
+        dsfu[x].parent = y;
+        dsfu[y].rank++;
+    }
+}
+void Print(vector<Edge> &mst)
+{
+cout<<"MST formed is\n";
+for(auto p: mst)
+cout<<"src: "<<p.from<<"  dst: "<<p.to<<"  wt: "<<p.weight<<"\n";    
+}
+
+void Kruskals(vector<Edge> &EdgeList,vector<Node>&dsfu, vector<Edge> &mst,int V, int E)
+{
+    sort(EdgeList.begin(), EdgeList.end(), compare);
+   
+    int i=0,j=0;
+    while(i<V-1 && j< E)
+    {
+        int x = FIND(EdgeList[j].from, dsfu);
+        int y = FIND(EdgeList[j].to, dsfu);
+        if(x==y)
+        {
+            j++;
+            continue;
+        }
+        UNION(x,y,dsfu);
+        mst.push_back(EdgeList[j]);
+        i++;
+    }
+}
+
+
+
+
+int main()
+
+{
+    int V,E,u,v,w;
+   
+    cout << "Enter the no of vertices and edges: " << endl;
+    cin  >> V >> E;
+    //vector<Edge> EdgeList(E);
+    cout << "Enter the Edges: " << endl;
+    // Edge temp;
+    // vector<Edge> mst(V-1);
+    // for(int i=0;i<E;i++)
+    // {
+    //     cin >> u >> v >> w;
+    //     temp.from = u;
+    //     temp.to = v;
+    //     temp.weight = w;
+    //     EdgeList.push_back(temp);
+    // }
+vector<Edge> EdgeList; //Adjacency list
+Edge temp;
+for(int i=0;i<E;++i)
+{
+int u,v,w;
+cin>>u>>v>>w;
+temp.from = u;
+temp.to = v;
+temp.weight = w;
+EdgeList.push_back(temp);
+}    
+   
+    vector<Node> dsfu(V);
+    for(int i=0;i<V;i++)
+    {
+        dsfu[i].parent = -1;
+        dsfu[i].rank = 0;
+    }
+    vector<Edge> mst;
+    Kruskals(EdgeList,dsfu, mst,V,E);
+   
+    Print(mst);
+   
+
+    return 0;
+}
+---------------------------------------------------------------------------------------------
+
+Q16) 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+
+---------------------------------------------------------------------------------------------
+
+Q16) 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+
+---------------------------------------------------------------------------------------------
+
+Q16) 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+
+---------------------------------------------------------------------------------------------

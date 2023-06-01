@@ -1,0 +1,1885 @@
+                    		******Dynamic programming******
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q1) Knapsack Problem
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice efficient sol
+{
+    public:
+    //Function to return max value that can be put in knapsack of capacity W.
+    int knapSack(int W, int wt[], int val[], int n) 
+    { 
+       int dp[n+1][W+1];
+       for(int i=0; i<n+1; i++)
+       {
+           for(int j=0; j<W+1; j++)
+           {
+               if(i==0 || j==0) dp[i][j] = 0;
+           }
+       }
+       
+       for(int i=1; i<n+1; i++)
+       {
+           for(int j=1; j<W+1; j++)
+           {
+               if(wt[i-1] <= j) 
+               {
+                   dp[i][j] = max(val[i-1] + dp[i-1][j-wt[i-1]], dp[i-1][j]);
+               }
+               else
+               {
+                   dp[i][j] = dp[i-1][j];
+               }
+           }
+       }
+       return dp[n][W];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q2) Subset Sum Problem 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice efficient sol
+{   
+public:
+    bool isSubsetSum(vector<int>arr, int sum)
+    {
+        int n = arr.size();
+        bool dp[n+1][sum+1];
+        
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = false;
+                
+                if(j == 0) dp[i][j] = true;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j) 
+                {
+                    dp[i][j] = dp[i-1][j-arr[i-1]] || dp[i-1][j];
+                }
+                else 
+                {
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+        
+        return dp[n][sum];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q3) Partition Equal Subset Sum problem 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice efficient sol
+{
+public:
+    bool subsetsum(int arr[], int n, int sum)					//helper function
+    {
+        bool dp[n+1][sum+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = false;
+                if(j == 0) dp[i][j] = true;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j)
+                    dp[i][j] = dp[i-1][j-arr[i-1]] || dp[i-1][j];
+                    
+                else
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][sum];
+    }
+    
+    int equalPartition(int n, int arr[])					//main function
+    {
+        int sum = 0;
+        for(int i=0; i<n; i++)
+        {
+            sum = sum + arr[i];
+        }
+        
+        if(sum%2 != 0) return false;
+        else return subsetsum(arr, n, sum/2);
+    }
+};
+---------------------------------------------------------------------------------------------
+Q4) Perfect Sum problem ( Count of Subsets Sum with a Given Sum)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution						         //gfg practice efficient sol
+{
+   public:
+   int perfectSum(int arr[], int n, int sum)
+   {
+        int dp[n+1][sum+1];
+        int mod = 1e9 + 7;
+        
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = 0;
+                if(j == 0) dp[i][j] = 1;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j)
+                {
+                    dp[i][j] = dp[i-1][j]%mod + dp[i-1][j-arr[i-1]]%mod;
+                }
+                else
+                {
+                    dp[i][j] = dp[i-1][j]%mod;
+                }
+            }
+        }
+        
+        return dp[n][sum]%mod;
+  }
+};
+---------------------------------------------------------------------------------------------
+Q5) Minimum sum partition
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution						         //gfg practice efficient sol
+{
+  public:
+    vector<int> solve(int arr[], int n, int sum)                    //helper function
+    {
+        bool dp[n+1][sum+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = false;
+                if(j == 0) dp[i][j] = true;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j)
+                {
+                    dp[i][j] = dp[i-1][j] || dp[i-1][j-arr[i-1]];
+                }
+                else
+                {
+                    dp[i][j] = dp[i-1][j];
+                }
+            }
+        }
+
+        // creating a vector varible to store all the element of the last row 
+        vector<int> v;
+        for(int j=0; j<sum+1; j++)
+        {
+	    // keep true to only those place whose subset sum exist
+            if(dp[n][j] == true) v.push_back(j);
+        }
+        return v;
+    }
+    
+    int minDifference(int arr[], int n)                        //main function
+    { 
+	    int arr_sum = 0;
+	    for(int i=0; i<n; i++)
+	        arr_sum = arr_sum + arr[i];
+	        
+	    vector<int> v = solve(arr, n, arr_sum);
+	    
+	    int ans = INT_MAX;
+	    for(int i=0; i<v.size(); i++)
+	        ans = min(ans, abs(arr_sum - 2*v[i]));
+	      
+	    return ans;
+    } 
+};
+---------------------------------------------------------------------------------------------
+Q6) Partitions With Given Difference 
+    (Count no of subsets with given difference (DP))
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int countsubsetsum(vector<int> &arr, int n, int sum)			//coding ninjas
+{
+    int mod = 1e9+7;
+    int dp[n+1][sum+1];
+    for(int i=0; i<n+1; i++)
+    {
+        for(int j=0; j<sum+1; j++)
+        {
+            if(i == 0) dp[i][j] = 0;
+            if(j == 0) dp[i][j] = 1;
+        }
+    }
+    for(int i=1; i<n+1; i++)
+    {
+        for(int j=0; j<sum+1; j++)
+        {
+            if(arr[i-1] <= j)
+                dp[i][j] = dp[i-1][j]%mod + dp[i-1][j-arr[i-1]]%mod;
+            else 
+                dp[i][j] = dp[i-1][j]%mod;
+        }
+    }
+    return dp[n][sum]%mod;
+}
+
+int countPartitions(int n, int d, vector<int> &arr) 
+{
+    int arr_sum = 0;
+    for(int i=0; i<n; i++)
+        arr_sum = arr_sum + arr[i];
+    
+    if((arr_sum+d)%2 != 0) return 0;
+    int s1 = (d + arr_sum)/2;
+    return countsubsetsum(arr, n, s1);
+}
+---------------------------------------------------------------------------------------------
+Q7) Target sum problem // same as Q6.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice 
+{
+  public:
+    int countsubsetsum(vector<int> &arr, int n, int sum)		//helper function
+    {
+        int dp[n+1][sum+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = 0;
+                if(j == 0) dp[i][j] = 1;
+            }
+        }
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j)
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-arr[i-1]];
+                else 
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][sum];
+    }
+    
+    int findTargetSumWays(vector<int>&arr ,int target) 			//main function
+    {
+        int n = arr.size();
+        int arr_sum = 0;
+        for(int i=0; i<n; i++)
+            arr_sum = arr_sum + arr[i];
+        
+        if((arr_sum + target)%2 != 0) return 0;
+        int sum = (target + arr_sum)/2;
+        return countsubsetsum(arr, n, sum);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 							//Leetcode efficient sol
+{
+public:
+    int countsubsetsum(vector<int> &arr, int n, int sum)
+    {
+        int dp[n+1][sum+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(i == 0) dp[i][j] = 0;
+                if(j == 0) dp[i][j] = 1;
+            }
+        }
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=0; j<sum+1; j++)
+            {
+                if(arr[i-1] <= j)
+                    dp[i][j] = dp[i-1][j] + dp[i-1][j-arr[i-1]];
+                else 
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][sum];
+    }
+    
+    int findTargetSumWays(vector<int>& arr, int target) 
+    {
+        int n = arr.size();
+        int arr_sum = 0;
+        for(int i=0; i<n; i++)
+            arr_sum = arr_sum + arr[i];
+        
+        if((arr_sum + target)%2 != 0 || abs(target) > arr_sum) return 0;
+        int sum = (target + arr_sum)/2;
+        return countsubsetsum(arr, n, sum);
+    }
+};
+---------------------------------------------------------------------------------------------
+Q8) Knapsack with Duplicate Items
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+//Unbounded Knapsack (Repetition of items allowed)
+class Solution
+{
+public:
+    int knapSack(int n, int cap, int val[], int wt[])
+    {
+        int dp[n+1][cap+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<cap+1; j++)
+            {
+                if(i == 0) dp[i][j] = 0;
+                if(j == 0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<cap+1; j++)
+            {
+                if(wt[i-1] <= j)
+                    dp[i][j] = max(dp[i-1][j], val[i-1] + dp[i][j-wt[i-1]]);
+                    
+                else
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][cap];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q9) Rod Cutting // exactly same problem as above Q8.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{
+  public:
+    int cutRod(int price[], int n) 
+    {
+        int len[n];
+        for(int i=0; i<n; i++) len[i] = i+1;
+        int dp[n+1][n+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<n+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<n+1; j++)
+            {
+                if(len[i-1] <= j)
+                    dp[i][j] = max(dp[i-1][j], price[i-1] + dp[i][j-len[i-1]]);
+                    
+                else
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][n];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q10) coin change problem-I (maximum no of ways)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 
+{
+  public:
+    long long int count(int coin[], int n, int sum) 
+    {
+         long long dp[n+1][sum+1];
+         for(int i=0;i<n+1; i++)
+         {
+             for(int j=0; j<sum+1; j++)
+             {
+                 if(i==0) dp[i][j] = 0;
+                 if(j==0) dp[i][j] = 1;
+             }
+         }
+         
+         for(int i=1;i<n+1; i++)
+         {
+             for(int j=1; j<sum+1; j++)
+             {
+                 if(coin[i-1] <= j)
+                    dp[i][j] = dp[i-1][j] + dp[i][j-coin[i-1]];
+                 else
+                    dp[i][j] = dp[i-1][j];
+             }
+         }
+         return dp[n][sum];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q11) coin change problem-II (Minimum number of coins)
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{
+	public:
+	int minCoins(int coin[], int n, int sum) 
+	{ 
+	    int dp[n+1][sum+1];
+	    
+	    for(int i=1; i<n+1; i++) dp[i][0] = 0;                  //1st clo starts from 2nd row
+	    for(int j=0; j<sum+1; j++) dp[0][j] = INT_MAX-1;        //1st row
+	    
+	    for(int j=1; j<sum+1; j++)                              //2nd row starts from 2nd col
+	    {
+	        if(j % coin[0] == 0) dp[1][j] = j/coin[0];
+	        else dp[1][j] = INT_MAX-1;
+	    }
+	    
+	    for(int i=2; i<n+1; i++)                                //code variation
+	    {
+	        for(int j=1; j<sum+1; j++)
+	        {
+	            if(coin[i-1] <= j)
+	                dp[i][j] = min(dp[i-1][j], 1 + dp[i][j-coin[i-1]]);
+	            else
+	                dp[i][j] = dp[i-1][j];
+	        }
+	    }
+	    if(dp[n][sum] == INT_MAX-1) return -1;                  //if not possible
+	    else return dp[n][sum];
+	} 
+};
+---------------------------------------------------------------------------------------------
+Q12) Longest common subsequence
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution						//Leetcode brute force by recursion
+{
+public:
+    int LCS(string& x,string& y,int n,int m)
+    {
+        if(n==0||m==0) return 0;
+        
+        if(x[n-1] == y[m-1])
+            return 1 + LCS(x, y, n-1, m-1);
+        else
+            return  max(LCS(x,y,n,m-1),LCS(x,y,n-1,m));
+    }
+    
+    int longestCommonSubsequence(string text1, string text2) 
+    {
+        
+        int n = text1.size();
+        int m = text2.size();
+      
+        return LCS(text1,text2,n,m);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 						//Leetcode memoization method efficient
+{
+public:
+    int dp[1001][1001];
+    int LCS(string& x,string& y,int n,int m)
+    {
+        if(n==0 || m==0) return 0;
+        if(dp[n][m] != -1) return dp[n][m];
+        
+        if(x[n-1] == y[m-1])
+            return dp[n][m] = 1 + LCS(x, y, n-1, m-1);
+        else
+            return dp[n][m] = max(LCS(x, y, n, m-1), LCS(x, y, n-1, m));
+    }
+    
+    int longestCommonSubsequence(string text1, string text2) 
+    {       
+        int n = text1.size();
+        int m = text2.size();
+        memset(dp, -1, sizeof(dp));
+        return LCS(text1, text2, n, m);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 							//Leetcode top-down approach
+{
+public:
+    int longestCommonSubsequence(string s1, string s2) 
+    {       
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    
+                else
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        return dp[n][m];
+    }
+};
+---------------------------------------------------------------------------------------------
+Q13)  Longest common substring
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//Leetcode top-down approach
+{
+    public:
+    
+    int longestCommonSubstr (string s1, string s2, int n, int m)
+    {
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    
+                else
+                    dp[i][j] = 0;
+            }
+        }
+        
+        int ans = 0;
+        for(int i=1; i<n+1; i++)                            //finding ans
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                ans = max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q14) print lagest common subsequence
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+string LCS(string s1, string s2, int n, int m)
+{
+    int dp[n+1][m+1];
+
+    for(int i=0; i<n+1; i++)                            //initialization
+    {
+        for(int j=0; j<m+1; j++)
+        {
+            if(i==0 || j==0) dp[i][j] = 0;
+        }
+    }
+        
+    for(int i=1; i<n+1; i++)                              //code
+    {
+        for(int j=1; j<m+1; j++)
+        {
+            if(s1[i-1] == s2[j-1])
+                dp[i][j] = 1 + dp[i-1][j-1];
+                
+            else
+                dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+        }
+    }
+    
+    string ans = "";                                      //for printing LCS
+    int i=n, j=m;
+    while(i>0 && j>0)
+    {
+        if(s1[i-1] == s2[j-1])
+        {
+            ans.push_back(s1[i-1]);
+            i--;
+            j--;
+        }
+        else
+        {
+            if(dp[i-1][j] > dp[i][j-1]) i--;
+            else j--;
+        }
+    }
+    reverse(ans.begin(), ans.end());
+    return ans;
+}
+
+int main()
+{
+	string X = "acbcf";
+	string Y = "abcdaf";
+	int n = X.size();
+	int m = Y.size();
+	string p = LCS(X, Y, n, m);
+	for(int i=0; i<p.size(); i++)
+	    cout << p[i];
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+Q15) length of shortest common supersequence of two strings.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice efficient sol
+{
+    public:
+    //Function to find length of shortest common supersequence of two strings.
+    int shortestCommonSupersequence(string X, string Y, int n, int m)
+    {
+        int dp[n+1][m+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(X[i-1] == Y[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                else 
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        
+        int lenC = dp[n][m];
+        return n + m - lenC;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q16) print  Shortest Common Supersequence
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:    
+    string shortestCommonSupersequence(string s1, string s2)            //main function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    
+                else
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        
+        /*--------------------------------------------------------------------------------*/
+        int i = n, j = m;
+        string ans = "";
+        while(i>0 && j>0)
+        {
+            if(s1[i-1] == s2[j-1])
+            {
+                ans.push_back(s1[i-1]);
+                i--;
+                j--;
+            }
+            else
+            {
+                if(dp[i-1][j] > dp[i][j-1])
+                {
+                    ans.push_back(s1[i-1]);
+                    i--;
+                }
+                else
+                {
+                    ans.push_back(s2[j-1]);
+                    j--;
+                }
+            }
+        }
+        
+        while(i>0)
+        {
+            ans.push_back(s1[i-1]);
+            i--;
+        }
+        
+        while(j>0)
+        {
+            ans.push_back(s2[j-1]);
+            j--;
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;       
+    }
+};
+---------------------------------------------------------------------------------------------
+Q17) Minimum number of deletions and insertions.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice efficient sol
+{
+public:
+	int minOperations(string s1, string s2) 
+	{ 
+	    int n = s1.size();
+	    int m = s2.size();
+	    int dp[n+1][m+1];
+	    
+	    for(int i=0; i<n+1; i++)                            //initialization
+            {
+                for(int j=0; j<m+1; j++)
+                {
+                    if(i==0 || j==0) dp[i][j] = 0;
+                }
+            }
+        
+            for(int i=1; i<n+1; i++)                            //code
+            {
+                for(int j=1; j<m+1; j++)
+                {
+                    if(s1[i-1] == s2[j-1])
+                        dp[i][j] = 1 + dp[i-1][j-1];
+                    
+                    else
+                        dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+                }
+            }
+            int LCS = dp[n][m];
+            int del = n - LCS;
+            int inser = m - LCS;
+            return del + inser;
+	} 
+};
+---------------------------------------------------------------------------------------------
+Q18) Longest Palindromic Subsequence // return length
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{
+  public:
+    int LCS(string s1, string s2)                           //helper function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                
+                else
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        return dp[n][m];
+    }
+    
+    int longestPalinSubseq(string s)                        //main fuunction
+    {
+        string s1 = s;
+        string s2 = "";
+        reverse(s.begin(), s.end());
+        s2 = s;
+        int ans = LCS(s1, s2);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q19) Longest Palindromic Substring // return length
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+int LCSubstring(string s1, string s2)                           //helper function
+{
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                
+                else
+                    dp[i][j] = 0;
+            }
+        }
+        
+        int ans = 0;
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                ans = max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+}
+
+int main()
+{
+	string s = "forgeeksskeegfor";
+	string s1 = s;
+        string s2 = "";
+        reverse(s.begin(), s.end());
+        s2 = s;
+
+        int ans = LCSubstring(s1, s2);
+
+	cout << ans;
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+Q20) Minimum number of deletions.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice
+{
+  public:
+    int LCS(string s1, string s2)                           //helper function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                
+                else
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        return dp[n][m];
+    }
+    
+    int minDeletions(string s, int n)                       //main function
+    { 
+        string s1 = s;
+        string s2 = s;
+        reverse(s2.begin(), s2.end());
+
+        int LPS = LCS(s1, s2);
+        int ans = s.size() - LPS;
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q21) same Q16) print SCSuperstring
+---------------------------------------------------------------------------------------------
+Q22) Longest Repeating Subsequence
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+	public:
+	    int LCS(string s1, string s2, int n, int m)
+	    {
+	        int dp[n+1][m+1];
+	        for(int i=0; i<n+1; i++)
+	        {
+	            for(int j=0; j<m+1; j++)
+	            {
+	                if(i==0 || j==0) dp[i][j] = 0;
+	            }
+	        }
+	        
+	        for(int i=1; i<n+1; i++)
+	        {
+	            for(int j=1; j<m+1; j++)
+	            {
+	                if(s1[i-1] == s2[j-1] && i != j)                //variation i!=j
+	                    dp[i][j] = 1 + dp[i-1][j-1];
+	                else
+	                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+	            }
+	        }
+	        return dp[n][m];
+	    }
+
+	    int LongestRepeatingSubsequence(string s)
+	    {
+		    string s1 = s;
+		    string s2 = s;
+		    int n = s.size();
+		    int m = s.size();
+		    int ans = LCS(s1, s2, n, m);
+		    return ans;
+	    }
+};
+---------------------------------------------------------------------------------------------
+Q23)  Is Subsequence?		//Sequence Pattern Matching
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:
+    bool isSubsequence(string s1, string s2) 
+    {
+        int n = s1.size(); 
+        int m = s2.size();
+        int dp[n+1][m+1];
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+	        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])                
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                else
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+        
+        if(dp[n][m] == n) return true;				//code variation
+        else return false;        
+    }
+};
+---------------------------------------------------------------------------------------------
+Q24) Minimum Insertion Steps to Make a String Palindrome // same code for mini #of deletion
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient
+{
+public:
+    int LCS(string s1, string s2)				//helper function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1]) 
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                else
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+            }
+        }
+        
+        return dp[n][m];
+    }
+
+    int minInsertions(string s) 				//main function
+    {
+        string s1 = s;
+        string s2 = s;
+        reverse(s2.begin(), s2.end());
+
+        int LPS = LCS(s1, s2);
+        int ans = s.size() - LPS;
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q25)	Matrix Chain Multiplication
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice:- brute force
+{
+public:
+    int solve(int arr[], int i, int j)
+    {
+        if(i >= j) return 0;
+        
+        int ans = INT_MAX;
+        for(int k=i; k<j; k++)
+        {
+            int tempans = solve(arr, i, k) + 
+                          solve(arr, k+1, j) + 
+                          arr[i-1] * arr[k] * arr[j];
+                          
+            ans = min(ans, tempans);
+        }
+        return ans;
+    }
+    
+    int matrixMultiplication(int n, int arr[])
+    {
+        int i = 1;
+        int j = n-1;
+        int ans = solve(arr, i, j);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution						//gfg practice:-efficient memoization
+{
+public:
+    int dp[101][101];
+    int solve(int arr[], int i, int j)
+    {
+        if(i >= j) return 0;                        //base condi.
+        if(dp[i][j] != -1) return dp[i][j];         //for memoization
+
+        int ans = INT_MAX;
+        for(int k=i; k<j; k++)                      //code
+        {
+            int tempans = solve(arr, i, k) + 
+                          solve(arr, k+1, j) + 
+                          arr[i-1] * arr[k] * arr[j];
+                          
+            ans = min(ans, tempans);
+        }
+        return dp[i][j] = ans;
+    }
+    
+    int matrixMultiplication(int n, int arr[])
+    {
+        int i = 1;
+        int j = n-1;
+        memset(dp, -1, sizeof(dp));
+        int ans = solve(arr, i, j);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q26) Palindromic Partitioning
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice:- brute force
+{
+public:
+    bool ispalindrome(string s, int i, int j)                   //helper-2
+    {
+        while(i < j)
+        {
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+    
+    int solve(string s, int i, int j)                           //helper-1
+    {
+        if(i >= j || ispalindrome(s, i, j)) return 0;
+        
+        int ans = INT_MAX;
+        for(int k=i; k<j; k++)
+        {
+            int tempans = solve(s, i, k) + solve(s, k+1, j) + 1;
+            ans = min(ans, tempans);
+        }
+        return ans;
+    }
+    
+    int palindromicPartition(string s)                          //main fun
+    {
+        int i = 0;
+        int j = s.size() - 1;
+        int ans = solve(s, i, j);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 					//Leetcode:-memoization but not fully efficient
+{
+public:
+    int dp[2001][2001];
+    bool ispalindrome(string s, int i, int j)                   //helper-2
+    {
+        if(i >= j) return true;
+        while(i < j)
+        {
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+    
+    int solve(string s, int i, int j)                           //helper-1
+    {
+        if(i >= j || ispalindrome(s, i, j)) return 0;
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int ans = INT_MAX;
+        for(int k=i; k<j; k++)
+        {
+            int tempans = solve(s, i, k) + solve(s, k+1, j) + 1;
+            ans = min(ans, tempans);
+        }
+        return dp[i][j] = ans;
+    }
+    
+    int minCut(string s) 					//main fun
+    {
+        int i = 0;
+        int j = s.size() - 1;
+        
+        memset(dp, -1, sizeof(dp));
+        int ans = solve(s, i, j);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 						//Leetcode:-memoization efficient sol
+{
+public:
+    int dp[2001][2001];
+    bool ispalindrome(string &s, int i, int j)                   //helper-2
+    {
+        if(i >= j) return true;				   //--->base cond
+        while(i < j)
+        {
+            if(s[i] != s[j]) return false;
+            i++;
+            j--;
+        }
+        return true;
+    }
+    
+    int solve(string &s, int i, int j)                           //helper-1
+    {
+        if(i >= j || ispalindrome(s, i, j)) return 0;	   //--->base cond
+        if(dp[i][j] != -1) return dp[i][j];
+        
+        int ans = INT_MAX;
+        for(int k=i; k<j; k++)
+        {
+            if(ispalindrome(s, i, k) == false) continue;
+            int tempans = solve(s, i, k) + solve(s, k+1, j) + 1;
+            ans = min(ans, tempans);
+        }
+        return dp[i][j] = ans;
+    }
+    
+    int minCut(string s)                                          //main fun
+    {
+        int i = 0;
+        int j = s.size() - 1;
+        
+        memset(dp, -1, sizeof(dp));
+        int ans = solve(s, i, j);
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q27) Boolean Parenthesization
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice recursive 
+{
+public:
+    int solve(string s, int i, int j, bool isTrue)		//helper function
+    {
+        if(i>j) return 0;					//BC->1
+        if(i==j)						//BC->2
+        {
+            if(isTrue) return s[i] == 'T';
+            else return s[i] == 'F';
+        }
+        
+        int ans = 0;
+        for(int k=i+1; k<j; k=k+2)				//code
+        {
+            int lf = solve(s, i, k-1, false);
+            int lt = solve(s, i, k-1, true);
+            int rf = solve(s, k+1, j, false);
+            int rt = solve(s, k+1, j, true);
+            
+            if(s[k] == '&')
+            {
+                if(isTrue) ans = ans + lt*rt;
+                else ans = ans + lf*rt + lt*rf + lf*rf;     
+            }
+            else if(s[k] == '|')
+            {
+                if(isTrue) ans = ans + lt*rf + lf*rt + lt*rt;
+                else ans = ans + lf*rf;
+            }
+            else if(s[k] == '^')
+            {
+                if(isTrue) ans = ans + lt*rf + lf*rt;
+                else ans = ans + lt*rt + lf*rf;
+            }
+        }
+        return ans;
+    }
+    
+    int countWays(int n, string s)				//main function
+    {
+        int i=0;
+        int j=s.size()-1;
+        return solve(s, i, j, true);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution							//gfg practice efficient memo.
+{
+public:
+    int dp[201][201][2];
+    int solve(string s, int i, int j, bool isTrue)                  //helper function
+    {
+        if(i>j) return 0;                                   //BC-->1
+        if(i==j)                                            //BC-->2
+        {
+            if(isTrue) return s[i] == 'T';
+            else return s[i] == 'F';
+        }
+        
+        if(dp[i][j][isTrue] != -1) return dp[i][j][isTrue]; //if ans is already cal.
+        
+        int ans = 0;
+        for(int k=i+1; k<j; k=k+2)
+        {
+            int lf = solve(s, i, k-1, false);
+            int lt = solve(s, i, k-1, true);
+            int rf = solve(s, k+1, j, false);
+            int rt = solve(s, k+1, j, true);
+            
+            if(s[k] == '&')
+            {
+                if(isTrue) ans = ans + lt*rt;
+                else ans = ans + lf*rt + lt*rf + lf*rf;     
+            }
+            else if(s[k] == '|')
+            {
+                if(isTrue) ans = ans + lt*rf + lf*rt + lt*rt;
+                else ans = ans + lf*rf;
+            }
+            else if(s[k] == '^')
+            {
+                if(isTrue) ans = ans + lt*rf + lf*rt;
+                else ans = ans + lt*rt + lf*rf;
+            }
+        }
+        return dp[i][j][isTrue] = ans % 1003;                   //bcz ans may be large
+    }
+    
+    int countWays(int n, string s)                                  //main function
+    {
+        int i=0;
+        int j=s.size()-1;
+        memset(dp, -1, sizeof(dp));
+        return solve(s, i, j, true);
+    }
+};
+---------------------------------------------------------------------------------------------
+Q28) scramble strings
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode:- recursive sol
+{
+public:
+    bool solve(string s1, string s2)					//helper function
+    {
+        int n = s1.size();
+        if(n < 1) return false;					//BC-->1
+        if(s1.compare(s2) == 0) return true;			//BC-->2
+        
+        bool flag = false;
+        for(int i=1; i<n; i++)					//code
+        {
+            bool c1 = solve(s1.substr(0, i), s2.substr(n-i, i)) &&
+                      solve(s1.substr(i, n-i), s2.substr(0, n-i));
+            
+            bool c2 = solve(s1.substr(0, i), s2.substr(0, i)) &&
+                      solve(s1.substr(i, n-i), s2.substr(i, n-i));
+            
+            if(c1 || c2)
+            {
+                flag = true;
+                break;
+            }
+        }
+        return flag;
+    }
+    
+    bool isScramble(string s1, string s2) 				//main function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        if(n==0 && m==0) return true;
+        if(n != m) return false;
+        
+        return solve(s1, s2);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 							//Leetcode:- efficient memo
+{
+public:
+    unordered_map<string, bool> mp;
+    bool solve(string s1, string s2)                                //helper function
+    {
+        int n = s1.size();
+        if(n < 1) return false;                     //BC-->1
+        if(s1.compare(s2) == 0) return true;        //BC-->2
+        
+        string key = s1;                                    //for memoization
+        key.append("-");
+        key.append(s2);
+        if(mp.find(key) != mp.end()) return mp[key];
+        
+        bool flag = false;
+        for(int i=1; i<n; i++)
+        {
+            bool c1 = solve(s1.substr(0, i), s2.substr(n-i, i)) &&
+                      solve(s1.substr(i, n-i), s2.substr(0, n-i));
+            
+            bool c2 = solve(s1.substr(0, i), s2.substr(0, i)) &&
+                      solve(s1.substr(i, n-i), s2.substr(i, n-i));
+            
+            if(c1 || c2)
+            {
+                flag = true;
+                break;
+            }
+        }
+        return mp[key] = flag;
+    }
+    
+    bool isScramble(string s1, string s2)                           //main function
+    {
+        int n = s1.size();
+        int m = s2.size();
+        if(n==0 && m==0) return true;
+        if(n != m) return false;
+        
+        return solve(s1, s2);
+    }
+};
+---------------------------------------------------------------------------------------------
+Q29) Super Egg Drop problem
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode:- recursive sol
+{
+public:
+    int superEggDrop(int e, int f) 
+    {
+        if(f==0 || f==1) return f;                  //BC-->1
+        if(e==1) return f;                          //BC-->2
+        
+        int ans = INT_MAX;
+        for(int k=1; k<=f; k++)
+        {
+            int tempans = 1 + max(superEggDrop(e-1, k-1), superEggDrop(e, f-k));
+            ans = min(ans, tempans);
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 						//Leetcode:- memo but not efficient
+{
+public:
+    int dp[101][10001];
+    int solve(int e, int f)                                         //helper function
+    {
+        if(f==0 || f==1) return f;                  //BC-->1
+        if(e==1) return f;                          //BC-->2
+        
+        if(dp[e][f] != -1) return dp[e][f];
+        int ans = INT_MAX;
+        for(int k=1; k<=f; k++)
+        {
+            int tempans = 1 + max(superEggDrop(e-1, k-1), superEggDrop(e, f-k));
+            ans = min(ans, tempans);
+        }
+        return dp[e][f] = ans; 
+    }
+    
+    int superEggDrop(int e, int f)                                  //main function
+    {
+        memset(dp, -1, sizeof(dp));
+        return solve(e, f);       
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution					//gfg practice efficient memo but not for Leetcode
+{
+    public:
+    //Function to find minimum number of attempts needed in 
+    //order to find the critical floor.
+    int dp[201][201];
+    int solve(int e, int f)                                 //helper function
+    {
+        if(f==0 || f==1) return f;                  //BC-->1
+        if(e==1) return f;                          //BC-->2
+        
+        if(dp[e][f] != -1) return dp[e][f];		     //solve(e, f) already solved-->i
+        int ans = INT_MAX;
+        for(int k=1; k<=f; k++)
+        {
+            int low, high;
+            if(dp[e-1][k-1] != -1) low = dp[e-1][k-1];      //solve(e-1, k-1) already solved-->ii
+            else
+            {
+                low = solve(e-1, k-1);
+                dp[e-1][k-1] = low;
+            }
+            
+            if(dp[e][f-k] != -1) high = dp[e][f-k];         //solve(e, f-k) already solved-->iii
+            else
+            {
+                high = solve(e, f-k);
+                dp[e][f-k] = high;
+            }
+            int tempans = 1 + max(low, high);
+            ans = min(ans, tempans);
+        }
+        return dp[e][f] = ans;
+    }
+    
+    int eggDrop(int e, int f)                                   //main function
+    {
+        memset(dp, -1, sizeof(dp));
+        return solve(e, f);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution                                          //Leetcode:- effici memo by BST
+{
+public:
+    int dp[101][10001];
+    int solve(int e, int f)                                         //helper function
+    {
+        if(f==0 || f==1) return f;                  //BC-->1
+        if(e==1) return f;                          //BC-->2
+        
+        if(dp[e][f] != -1) return dp[e][f];
+        int ans = INT_MAX;
+
+        int l=1, h=f;				    //for BST working
+        while(l <= h)
+        {
+            int mid = (l+h)/2;
+            int low = solve(e-1, mid-1);
+            int high = solve(e, f-mid);
+            if(low < high) l = mid + 1;
+            else h = mid - 1;
+
+            int tempans = 1 + max(low, high);
+            ans = min(ans, tempans);
+        }
+        return dp[e][f] = ans; 
+    }
+    
+    int superEggDrop(int e, int f)                                  //main function
+    {
+        memset(dp, -1, sizeof(dp));
+        return solve(e, f);       
+    }
+}; 
+---------------------------------------------------------------------------------------------
+Q30) diameter of a binary tree
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 					//gfg practice:- # of nodes on longest path
+{
+  public:
+  int ma;
+  
+  int fun(Node *root)
+  {
+      if(!root)return 0;
+      int x = fun(root->left);
+      int y = fun(root->right);
+      ma = max(ma, x+y+1);
+      return max(x,y) + 1;
+  }
+    
+  int diameter(Node* root) 		// Function to return the diameter of a Binary Tree
+  {
+        ma = INT_MIN;
+        fun(root);
+        return ma;
+  }
+};
+--------------------------------------------------------------------------------------------
+class Solution 					     //Leetcode:- # of edges on longest path
+{
+public:
+    int ans;
+    int solve(TreeNode *root)
+    {
+        if(!root) return 0;
+        int l = solve(root->left);
+        int r = solve(root->right);
+        
+        ans = max(ans, l+r+1);
+        return max(l, r) + 1;
+    }
+    
+    int diameterOfBinaryTree(TreeNode* root) 
+    {
+        ans = INT_MIN;
+        solve(root);
+        
+        return ans-1;        
+    }
+};
+--------------------------------------------------------------------------------------------
+Q31) Binary Tree Maximum Path Sum
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:
+    int ans;
+    int solve(TreeNode *root)
+    {
+        if(!root) return 0;
+        int l = solve(root->left);
+        int r = solve(root->right);
+        
+        l = max(l, 0);
+        r = max(r, 0);
+        ans = max(ans, l + r + root->val);
+        return max(l, r) + root->val;
+    }
+    
+    int maxPathSum(TreeNode* root) 
+    {
+        ans = INT_MIN;
+        solve(root);
+        return ans;       
+    }
+};
+--------------------------------------------------------------------------------------------
+Q32) Binomial distribution
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg practice:- brute force
+{
+public:
+    int nCr(int n, int r)
+    {
+        if(r > n) return 0;
+        if(r==0 || r==n) return 1;
+        
+        return nCr(n-1, r-1) + nCr(n-1, r);
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution							//gfg practice:- efficient sol
+{
+public:
+    int nCr(int n, int r)
+    {
+        if(r > n) return 0;                 //BC-->1
+        if(n-r < r) r = n-r;                //BC-->2
+        int mod = 1e9 + 7;
+        
+        int dp[r+1];
+        memset(dp, 0, sizeof(dp));
+        dp[0] = 1;
+        for(int i=1; i<=n; i++)             //code
+        {
+            for(int j=min(r,i); j>0; j--)
+            {
+                dp[j] = (dp[j] + dp[j-1]) % mod;
+            }
+        }
+        return dp[r];
+    }
+};
+--------------------------------------------------------------------------------------------
+Q33) Permutation Coefficient
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>					//gfg article:- brute force
+using namespace std;
+
+int nPr(int n, int k)				//helper fun
+{
+   int fact[n+1];
+   fact[0] = 1;
+   
+   for(int i=1; i<n+1; i++)
+      fact[i] = i * fact[i-1];
+   
+   return (fact[n] / fact[n-k]);
+}
+
+int main()					//main fun
+{
+	int n = 10, k = 2;
+	int ans = nPr(n, k);
+    cout << ans;
+
+	return 0;
+}
+--------------------------------------------------------------------------------------------
+int nPr(int n, int k)						//gfg article efficient sol
+{
+   int p = 1;
+   for(int i=0; i<k; i++)
+      p = p * (n-i);
+   
+   return p;
+}
+--------------------------------------------------------------------------------------------
+Q34) Edit distance
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg memoizatiopn
+{
+  public:
+    int dp[101][101];
+    int solve(string s, string t, int n, int m)
+    {
+        if(n==0) return m;
+        if(m==0) return n;
+        
+        if(dp[n][m] != -1) return dp[n][m];
+        if(s[n-1] == t[m-1])
+            dp[n][m] = solve(s, t, n-1, m-1);
+        else
+            dp[n][m] = 1 + min( min(solve(s,t, n-1, m), solve(s,t, n, m-1)), solve(s,t, n-1, m-1) );
+            
+        return dp[n][m];
+    }
+    
+    int editDistance(string s, string t) 
+    {
+        int n = s.size();
+        int m = t.size();
+        memset(dp, -1, sizeof(dp));
+        
+        int ans = solve(s, t, n, m);
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+int editDistance(string s, string t)					//gfg top down
+{
+    int n = s.length();
+    int m = t.length();
+    int dp[n+1][m+1];
+   
+    for(int i=0;i<n+1;i++)
+    {
+        for(int j=0;j<m+1;j++)
+        {
+            if(i==0) dp[i][j] = j;
+            else if(j==0) dp[i][j] = i;
+            else if(s[i-1]==t[j-1])
+            {
+                dp[i][j] = dp[i-1][j-1];
+            }
+            else
+            {
+                dp[i][j] =  1 + min(min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]);
+            }
+        }
+    }
+    return dp[n][m];   
+}
+--------------------------------------------------------------------------------------------
+Q35) Friends Pairing Problem 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg recursive brute force
+{
+public:
+    int countFriendsPairings(int n) 
+    { 
+        int mod = 1e9 + 7;
+        if(n<=2) return n;
+        return (countFriendsPairings(n-1) + (n-1) * countFriendsPairings(n-2)) % mod;
+    }
+}; 
+--------------------------------------------------------------------------------------------
+class Solution							//gfg efficient memoization
+{
+public:
+    int dp[10001];
+    long long int solve(int n)
+    {
+        int mod = 1e9 + 7;
+        if(n <= 2) return n;
+        if(dp[n] != -1) return dp[n];
+        
+        dp[n] = (solve(n-1)) % mod + ((n-1)*solve(n-2)) % mod;
+        return dp[n] % mod;
+    }
+    
+    int countFriendsPairings(int n) 
+    { 
+        memset(dp, -1, sizeof(dp));
+        return solve(n);
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution							//gfg efficient top down
+{
+public:
+    
+    int countFriendsPairings(int n) 
+    { 
+        long long dp[n+1];
+        int mod = 1e9+7;
+        
+        for(int i=0; i<n+1; i++)
+        {
+            if(i <= 2) dp[i] = i;
+            else
+            {
+                dp[i] = (dp[i-1]) % mod + ((i-1)*dp[i-2]) % mod;
+            }
+        }
+        return dp[n] % mod;
+    }
+};  
+--------------------------------------------------------------------------------------------
+Q36) Gold Mine Problem
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg recursssion
+{
+public:
+    int solve(vector<vector<int>> M, int i, int j, int n, int m)            //helper fun
+    {
+        if(i<0 || i==n || j==m) return 0;           //base cond
+        
+        int x = solve(M, i-1, j+1, n, m);           //rightUpperDiagonal
+        int y = solve(M, i, j+1, n, m);             //right
+        int z = solve(M, i+1, j+1, n, m);           //rightLowerDiagonal
+        
+        return M[i][j] + max(max(x, y), z);
+    }
+    
+    int maxGold(int n, int m, vector<vector<int>> M)                        //main fun
+    {
+        int ans = INT_MIN;
+        for(int i=0; i<n; i++)
+        {
+            ans = max(ans, solve(M, i, 0, n, m));
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution						//gfg memoization but not fully effi.
+{
+public:
+    int dp[51][51];
+    int solve(vector<vector<int>> M, int i, int j, int n, int m)            //helper fun
+    {
+        if(i<0 || i==n || j==m) return 0;           //base cond
+        if(dp[i][j] != -1) return dp[i][j];
+        int x = solve(M, i-1, j+1, n, m);           //rightUpperDiagonal
+        int y = solve(M, i, j+1, n, m);             //right
+        int z = solve(M, i+1, j+1, n, m);           //rightLowerDiagonal
+        
+        return dp[i][j] = M[i][j] + max(max(x, y), z);
+    }
+    
+    int maxGold(int n, int m, vector<vector<int>> M)                        //main fun
+    {
+        memset(dp, -1, sizeof(dp));
+        
+        int ans = INT_MIN;
+        for(int i=0; i<n; i++)
+        {
+            ans = max(ans, solve(M, i, 0, n, m));
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution							//gfg efficient memo
+{
+public:
+    int maxGold(int n, int m, vector<vector<int>> M)                      
+    {
+        int dp[n][m];
+        memset(dp, 0, sizeof(dp));
+        for(int j=m-1; j>=0; j--)
+        {
+            for(int i=0; i<n; i++)
+            {
+                int x = (i==0 || j==m-1)? 0:dp[i][j] = dp[i-1][j+1];
+                int y = (i==n-1 || j==m-1)? 0:dp[i][j] = dp[i+1][j+1];
+                int z = (j==m-1)? 0:dp[i][j] = dp[i][j+1];
+                
+                dp[i][j] = M[i][j] + max(max(x, y), z);
+            }
+        }
+        int ans = dp[0][0];
+        for(int i=1; i<n; i++)
+        {
+            ans = max(ans, dp[i][0]);
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------

@@ -1,0 +1,420 @@
+                    		******Bits manipulation******
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q1) Count set bits in an integer
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+    int setBits(int n) 
+    {
+        int count = 0;
+        while(n)
+        {
+            int bit = n&1;
+            if(bit == 1) count++;
+            n = n>>1;						//right shift by "1"
+        }
+        return count;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q2) Non Repeating Numbers
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg by unordered_map
+{
+public:
+    vector<int> singleNumber(vector<int> nums) 
+    {
+        int n = nums.size();
+        vector<int> ans;
+        unordered_map<int, int>mp;
+        for(int i=0; i<n; i++)
+        {
+            mp[nums[i]]++;
+        }
+        
+        for(auto it : mp)
+        {
+            if(it.second == 1) ans.push_back(it.first);
+        }
+        
+        sort(ans.begin(), ans.end());
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution
+{
+public:
+    vector<int> singleNumber(vector<int> nums) 
+    {
+        int n = nums.size();
+        vector<int> ans;
+        int XOR = nums[0];
+        for(int i=1; i<n; i++)
+        {
+            XOR = XOR ^ nums[i];
+        }
+        
+        int RMB = XOR & ~(XOR-1);                   //right most bit
+        int x = 0, y=0;
+        for(int i=0; i<n; i++)
+        {
+            if(nums[i] & RMB) x = x ^ nums[i];
+            else y = y ^ nums[i];
+        }
+        
+        ans.push_back(x);
+        ans.push_back(y);
+        sort(ans.begin(), ans.end());               //ans must be in assc. order mention in Q
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q3) Count number of bits to be flipped to convert A to B
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    // Function to find number of bits needed to be flipped to convert A to B
+    int countBitsFlip(int a, int b)
+    {
+        int ans = 0;
+        while(a>0 || b>0)
+        {
+            if(a%2 != b%2) ans++;
+            a = a/2;
+            b = b/2;
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution							   //vari. of Count set bits
+{
+    public:
+    // Function to find number of bits needed to be flipped to convert A to B
+    int countBitsFlip(int a, int b)
+    {
+        int ans = 0;
+        int val = a ^ b;
+        while(val)
+        {
+            if(val & 1) ans++;
+            val = val >> 1;
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q4) Count total set bits in all numbers from 1 to n
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg brute force
+{
+    public:
+    // n: input to count the number of set bits
+    //Function to return sum of count of set bits in the integers from 1 to n.
+    int countSetBits(int n)
+    {
+        int count = 0;
+        for(int i=1; i<=n; i++)
+        {
+            while(i)
+            {
+                if(i & 1) count++;
+                i = i >> 1;
+            }
+        }
+        return count;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution								//gfg efficient sol
+{
+public:
+    
+    int countBits(int n)
+    {
+        if(n == 0) return n;                        //base condition
+        
+        int ans = 0;
+        int p=0;
+        while(pow(2,p) <= n)			    //p-->largest power of 2 which is <= n
+        {
+            p++;
+        }
+        p--;
+        ans = ans + p*pow(2,p)/2 + (n-pow(2,p)+1) + countBits(n - pow(2,p));
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q5) Program to find whether a no is power of two
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    // Function to check if given number n is a power of two.
+    bool isPowerofTwo(long long n)
+    {
+        if(n == 0) return false;
+        if(n & n-1) return false;
+        return true;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q6) Find position of the only set bit
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+  public:
+    int findPosition(int n) 
+    {
+        if(n == 0) return -1;           //base condition
+        int pos = 0;
+        if(n & n-1)			//n contains more than one set bit
+        {
+            return -1;
+        }
+        else				//n contains unique set bit (i.e. power of 2)
+        {
+            while(n > 0)
+            {
+                pos++;
+                n = n/2;
+            }
+        }
+	return pos;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 							//same as above see if else
+{
+  public:
+    int findPosition(int n) 
+    {
+        if(n == 0) return -1;          	     //base condition
+        int pos = 0;
+        if((n & n-1) == 0)	            //n contains unique set bit (i.e. power of 2)		
+        {
+            while(n > 0)
+            {
+                pos++;
+                n = n/2;
+            }
+            return pos;
+        }
+        else		                    //n contains more than one set bit		
+            return -1;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q7) Copy set bits in a range
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    int setSetBit(int x, int y, int l, int r)
+    {
+        for(int i=l; i<=r; i++)
+        {
+            int mask = 1 << i-1;
+            if(y & mask)			//checking setbit
+            {
+                x = x | mask;			//setting setbit
+            }
+        }
+        return x;
+    }
+};
+---------------------------------------------------------------------------------------------
+#include <bits/stdc++.h>						//gfg article
+using namespace std;
+
+void copySetBits(unsigned &x, unsigned y, unsigned l, unsigned r)
+{
+    if(l<1 || 32<r) return;                 //base condition
+    for(int i=l; i<=r; i++)
+    {
+        int mask = 1 << i-1;
+        if(y & mask)			//checking setbit
+        {
+            x = x | mask;		//setting setbit
+        }
+    }
+}
+
+int main()
+{
+    unsigned x = 8, y = 7, l = 1, r = 2;
+    copySetBits(x, y, l, r);
+    cout << "Modified x is " << x;
+    return 0;
+}
+---------------------------------------------------------------------------------------------
+Q8-I) Left shift
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	// a = 5(00000101), b = 9(00001001)
+	unsigned char a = 5, b = 9;
+
+	// The result is 00001010
+	cout <<"a<<1 = "<< (a<<1) << endl;
+
+	// The result is 00010010
+	cout <<"b<<1 = "<< (b<<1) << endl;
+	return 0;
+}
+
+o/p:-
+a<<1 = 10
+b<<1 = 18
+---------------------------------------------------------------------------------------------
+Q8-II) Right shift
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <iostream>
+using namespace std;
+
+int main()
+{
+	// a = 5(00000101), b = 9(00001001)
+	unsigned char a = 5, b = 9;
+
+	// The result is 00000010
+	cout <<"a>>1 = "<< (a >> 1)<< endl;
+
+	// The result is 00000100
+	cout <<"b>>1 = "<< (b >> 1) << endl;
+	return 0;
+}
+
+o/p:-
+a>>1 = 2
+b>>1 = 4
+---------------------------------------------------------------------------------------------
+Q9) Division without using multiplication, division and mod operator 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg brute force
+{
+    public:
+    long long divide(long long a, long long b)              //a->divident, b->divisor
+    {
+        int sign = 1;
+        if((a<0 && b>0) || (a>0 && b<0)) sign = -1;
+        //int sign = ((a > 0)^(b > 0)) ? -1 : 1;            //same meaning of above 2 lines
+        
+        a = abs(a);
+        b = abs(b);
+        long long ans = 0;
+        while(a >= b)
+        {
+            ans++;
+            a = a - b;
+        }
+        return ans*sign;
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution								//gfg efficient sol
+{
+    public:
+    long long divide(long long a, long long b)              //a->divident, b->divisor
+    {
+        int sign = 1;
+        if((a<0 && b>0) || (a>0 && b<0)) sign = -1;
+        a = abs(a);
+        b = abs(b);
+        
+        long long ans = 0;
+        for(int i=32; i>=0; i--)
+        {
+            if((b<<i) <= a)
+            {
+                a = a - (b<<i);
+                ans = ans | (1<<i);
+            }
+        }
+        return ans * sign;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q10) Calculate square of a number without using *, / and pow()
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <iostream>							//gfg brute force
+using namespace std;
+
+int square(int n)
+{
+	if(n < 0) n = -n;
+	int ans = 0;
+	for(int i=1; i<=n; i++)
+	{
+	    ans = ans + n;
+	}
+	return ans;
+}
+
+int main()
+{
+	int n = 5;
+	int ans = square(n);
+	cout << "n^2 = " << ans;
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+#include <iostream>							//gfg efficient sol
+using namespace std;
+
+int square(int n)
+{
+    	if(n == 0) return 0;                    //base condition
+	if(n < 0) n = -n;                       //handle negative numbers
+	
+	int x = n>>1;                           	//floor of n
+
+	if(n & 1)                               	//n is odd
+	    return (square(x)<<2) + (x<<2) + 1;
+	else                                    	//n is even
+	    return (square(x)<<2);
+}
+
+int main()
+{
+	int n = -6;
+	int ans = square(n);
+	cout << "n^2 = " << ans;
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+Q11) Power Set
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+	public:
+		vector<string> AllPossibleStrings(string s)
+		{
+		    vector<string> ans;
+		    int n = pow(2, s.size());
+		    
+		    for(int i=1; i<n; i++)
+		    {
+		        int x = i;
+		        int j = 0;
+		        string c = "";
+		        while(x)
+		        {
+		            if(x & 1) c = c + s[j];
+		            x = x>>1;
+		            j++;
+		        }
+		        ans.push_back(c);
+		    }
+		    sort(ans.begin(), ans.end());
+		    return ans;
+		}
+};
+---------------------------------------------------------------------------------------------

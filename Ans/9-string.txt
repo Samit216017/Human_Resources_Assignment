@@ -1,0 +1,1660 @@
+                    			 ******String******
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q1) Reverse string
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode :- by stack
+{
+public:
+    void reverseString(vector<char>& s) 
+    {
+        int n = s.size();
+        stack<char> st;
+        
+        for(int i=0; i<n; i++)
+        {
+            st.push(s[i]);
+        }
+        
+        for(int i=0; i<n; i++)
+        {
+            s[i] = st.top();
+            st.pop();
+        }
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 
+{
+public:
+    void reverseString(vector<char>& s) 
+    {
+        int n = s.size();
+        
+        for(int i=0; i<n/2; i++)
+        {
+            swap(s[i], s[n-1-i]);
+        }
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 
+{
+public:
+    void reverseString(vector<char>& s) 
+    {
+        int n = s.size();
+        
+        for(int i=0, j=n-1; i<=j; i++, j--)
+        {
+            swap(s[i], s[j]);
+        }
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 
+{
+public:
+    void reverseString(vector<char>& s) 
+    {
+        reverse(s.begin(), s.end());
+    }
+};
+---------------------------------------------------------------------------------------------
+Q2) Palindrome string
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg practice
+{
+public:	
+	int isPalindrome(string s)
+	{
+	    int n = s.length();
+	    for(int i=0, j=n-1; i<=j; i++, j--)
+	    {
+	        if(s[i] != s[j]) return 0;
+	    }
+	    return 1;
+	}
+};
+---------------------------------------------------------------------------------------------
+class Solution
+{
+public:	
+	int isPalindrome(string s)
+	{
+	    int n = s.length();
+	    for(int i=0; i<n/2; i++)
+	    {
+	        if(s[i] != s[n-1-i]) return 0;
+	    }
+	    return 1;
+	}
+};
+---------------------------------------------------------------------------------------------
+Q3-I)  Find the repeated character present first in the string.
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg article
+{
+  public:
+    char firstRep (string s)
+    {
+        unordered_map<char, int> m;
+        int n = s.length();
+        for(int i=0; i<n; i++)
+        {
+            m[s[i]]++;
+        }
+        
+        for(int i=0; i<n; i++)
+        {
+            if(m[s[i]] > 1) return s[i];
+        }
+        return '#';
+    }
+};
+---------------------------------------------------------------------------------------------
+Q3-II) Find Duplicate characters in a string with its count
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>						//gfg article
+using namespace std;
+
+void printDups(string s)
+{
+    int n = s.length();
+    unordered_map<char, int> m;		//or we can take map also but time complexity increases
+    
+    for(int i=0; i<n; i++)
+    {
+        m[s[i]]++;
+    }
+    
+    for(auto it : m)
+    {
+        if(it.second > 1)
+            cout << it.first << "->" << it.second << endl;
+    }
+}
+
+int main()
+{
+	string str = "geeksforgeeks";
+	printDups(str);
+	return 0;
+}
+
+output:-
+''''''''
+s->2
+k->2
+e->4
+g->2
+---------------------------------------------------------------------------------------------
+Q4) A Program to check if strings are rotations of each other or not
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode brute force
+{
+public:
+    bool rotateString(string s, string goal) 
+    {
+        if(s.size() != goal.size()) return false;
+        if(s.size() == 0) return true;
+        
+        string temp = s + s;
+        return (temp.find(goal) != string :: npos);
+    }
+};
+---------------------------------------------------------------------------------------------
+class Solution 							//Leetcode efficient sol
+{
+public:
+    bool rotateString(string s, string goal) 
+    {
+        if(s.size() != goal.size()) return false;
+        if(s.size() == 0) return true;
+        
+        queue<char> q1, q2;
+        for(int i=0; i<s.size(); i++)
+            q1.push(s[i]);
+        
+        for(int i=0; i<goal.size(); i++)
+            q2.push(goal[i]);
+        
+        int n = goal.size();
+        while(n--)
+        {
+            char x = q2.front();
+            q2.pop();
+            q2.push(x);
+            if(q1 == q2) return true;
+        }
+        return false;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q5-I) Shuffle String
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode:- efficient sol
+{
+public:
+    string restoreString(string s, vector<int>& indices) 
+    {
+        string ans = s;
+        for(int i=0; i<s.size(); i++)
+        {
+           ans[indices[i]] = s[i]; 
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q5-II) Check if the given string is shuffled substring of another string
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>					//gfg article:-brute force
+using namespace std;
+
+bool isShuffledSubstring(string s1, string s2)
+{
+    int n1 = s1.size();
+    int n2 = s2.size();
+    if(n1 > n2) return false;
+    else
+    {
+        sort(s1.begin(), s1.end());
+        
+        for(int i=0; i<n2; i++)
+        {
+            if(i+n1-1 >= n2) return false;
+            
+            string temp = "";
+            for(int j=0; j<n1; j++)
+            {
+                temp.push_back(s2[i+j]);
+            }
+            sort(temp.begin(), temp.end());
+            if(s1 == temp) return true;
+        }
+    }
+}
+
+int main()
+{
+	string str1 = "geekforgeeks";
+	string str2 = "ekegorfkeegsgeek";
+
+	bool a = isShuffledSubstring(str1, str2);
+
+	if(a) cout << "YES";
+	else cout << "NO";
+
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+Q5-III) Shuffle Two Strings					//coding ninjas
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+bool isInterleaveUtil(string a, string b, string c, int n1, int n2, int n3)	//brute force
+{
+    if(n1==0 && n2==0 && n3==0) return true;
+    if(n1 + n2 != n3) return false;
+    
+    if(n1>0 && n2>0 && n3>0 && a[n1-1] == c[n3-1] && b[n2-1] == c[n3-1])
+        return isInterleaveUtil(a, b, c, n1-1, n2, n3-1) || isInterleaveUtil(a, b, c, n1, n2-1, n3-1);
+
+    else if(n1>0 && n3>0 && a[n1-1] == c[n3-1])
+        return isInterleaveUtil(a, b, c, n1-1, n2, n3-1);
+
+    else if(n2>0 && n3>0 && b[n2-1] == c[n3-1])
+        return isInterleaveUtil(a, b, c, n1, n2-1, n3-1);
+
+    else return false;
+}
+
+bool isInterleave(string a, string b, string c)
+{
+    int n1 = a.length(), n2 = b.length(), n3 = c.length();
+    return isInterleaveUtil(a, b, c, n1, n2, n3);
+}
+---------------------------------------------------------------------------------------------
+Q6) Count and Say
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode:-  efficient sol
+{
+public:
+    string countAndSay(int n) 
+    {
+        if(n==1) return "1";
+        if(n==2) return "11";
+        
+        string ans = "11";
+        for(int i=3; i<=n; i++)
+        {
+            string t = "";
+            ans = ans + '@';
+            int c = 1;
+            for(int j=1; j<ans.length(); j++)
+            {
+                if(ans[j] != ans[j-1])
+                {
+                    t = t + to_string(c);
+                    t = t + ans[j-1];
+                    c = 1;
+                }
+                else
+                {
+                    c++;
+                }
+            }
+            ans = t;
+        }
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q7)  Longest Palindromic Substring
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 				//print pali substr	//Leetcode:- efficient sol
+{
+public:
+    string longestPalindrome(string s) 
+    {
+        int n = s.size();
+        if(n<2) return s;
+        
+        int maxL = 1;
+        int start = 0;
+        for(int i=0; i<n; i++)
+        {
+            int low = i-1;
+            int high = i+1;
+            while(high < n && s[high] == s[i])
+            {
+                high++;
+            }                
+                
+            while(low >= 0 && s[low] == s[i])
+            {
+                low--;
+            }
+                
+            while(high < n && low >= 0 && s[low] == s[high])
+            {
+                low--;
+                high++;
+            }
+            
+            int len = high - low - 1;
+            if(maxL < len)
+            {
+                maxL = len;
+                start = low + 1;
+            }
+        }
+        
+        return s.substr(start, maxL);		//or return maxL; for length of LPsubstr.
+    }
+};
+---------------------------------------------------------------------------------------------
+#include <bits/stdc++.h>					              //return length
+using namespace std;
+
+int LCSubstring(string s1, string s2)                           //helper function
+{
+        int n = s1.size();
+        int m = s2.size();
+        int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                
+                else
+                    dp[i][j] = 0;
+            }
+        }
+        
+        int ans = 0;
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                ans = max(ans, dp[i][j]);
+            }
+        }
+        return ans;
+}
+
+int main()
+{
+	string s = "forgeeksskeegfor";
+	string s1 = s;
+    	string s2 = s;
+    	reverse(s2.begin(), s2.end());
+
+    	int ans = LCSubstring(s1, s2);
+
+	cout << ans;
+	return 0;
+}
+---------------------------------------------------------------------------------------------
+Q8) Longest Repeating Subsequence
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+	public:
+	    int LCS(string s1, string s2, int n, int m)
+	    {
+	        int dp[n+1][m+1];
+	        for(int i=0; i<n+1; i++)
+	        {
+	            for(int j=0; j<m+1; j++)
+	            {
+	                if(i==0 || j==0) dp[i][j] = 0;
+	            }
+	        }
+	        
+	        for(int i=1; i<n+1; i++)
+	        {
+	            for(int j=1; j<m+1; j++)
+	            {
+	                if(s1[i-1] == s2[j-1] && i != j)                //variation i!=j
+	                    dp[i][j] = 1 + dp[i-1][j-1];
+	                else
+	                    dp[i][j] = max(dp[i-1][j], dp[i][j-1]);
+	            }
+	        }
+	        return dp[n][m];
+	    }
+
+	    int LongestRepeatingSubsequence(string s)
+	    {
+		    string s1 = s;
+		    string s2 = s;
+		    int n = s.size();
+		    int m = s.size();
+		    int ans = LCS(s1, s2, n, m);
+		    return ans;
+	    }
+};
+---------------------------------------------------------------------------------------------
+Q9) print all subsequence of string
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>					//Pick and Don’t Pick Concept
+using namespace std;
+
+void printSubsequence(string ip, string op)			//helper fun
+{
+    if(ip.empty() == true) 
+    {
+        cout << op << endl;
+        return;
+    }
+    
+    printSubsequence(ip.substr(1), op + ip[0]);
+    
+    printSubsequence(ip.substr(1), op);
+}
+
+int main()
+{
+	string op = "";
+	string ip = "abcd";
+
+	printSubsequence(ip, op);
+    return 0;
+}
+---------------------------------------------------------------------------------------------
+Q10) print all Permutations of a given string
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg practice
+{
+	public:
+		vector<string> find_permutation(string s)
+		{
+		    sort(s.begin(), s.end());
+		    vector<string> ans;
+		    ans.push_back(s);
+		    
+		    while(next_permutation(s.begin(), s.end()))
+		    {
+		        ans.push_back(s);
+		    }
+		    return ans;
+		}
+};
+---------------------------------------------------------------------------------------------
+Q11) Split the binary string into substrings with equal number of 0s and 1s 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 
+{
+public:
+    int maxSubStr(string s)
+    {
+        int n = s.size();
+        int c0 = 0, c1 = 0, ans = 0;
+        
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '0') c0++;
+            else c1++;
+            
+            if(c0 == c1) ans++;
+        }
+        if(c0 != c1) return -1;
+        return ans;
+    }
+};
+---------------------------------------------------------------------------------------------
+Q12) Edit distance
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg memoizatiopn
+{
+  public:
+    int dp[101][101];
+    int solve(string s, string t, int n, int m)
+    {
+        if(n==0) return m;
+        if(m==0) return n;
+        
+        if(dp[n][m] != -1) return dp[n][m];
+        if(s[n-1] == t[m-1])
+            dp[n][m] = solve(s, t, n-1, m-1);
+        else
+            dp[n][m] = 1 + min( min(solve(s,t, n-1, m), solve(s,t, n, m-1)), solve(s,t, n-1, m-1) );
+            
+        return dp[n][m];
+    }
+    
+    int editDistance(string s, string t) 
+    {
+        int n = s.size();
+        int m = t.size();
+        memset(dp, -1, sizeof(dp));
+        
+        int ans = solve(s, t, n, m);
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+int editDistance(string s, string t)					//gfg top down
+{
+    int n = s.length();
+    int m = t.length();
+    int dp[n+1][m+1];
+   
+    for(int i=0;i<n+1;i++)
+    {
+        for(int j=0;j<m+1;j++)
+        {
+            if(i==0) dp[i][j] = j;
+            else if(j==0) dp[i][j] = i;
+            else if(s[i-1]==t[j-1])
+            {
+                dp[i][j] = dp[i-1][j-1];
+            }
+            else
+            {
+                dp[i][j] =  1 + min(min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1]);
+            }
+        }
+    }
+    return dp[n][m];   
+}
+--------------------------------------------------------------------------------------------
+Q13) Find next greater number with same set of digits
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+void swap(char *a, char *b)
+{
+    char temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+void findNext(char num[], int n)
+{
+	int i, j;
+	for(i=n-1; i>=0; i--)
+	{
+		if(num[i] > num[i-1])
+		break;
+	}
+
+	if(i==0)
+	{
+		cout << "Next number is not possible";
+		return;
+	}
+
+	int x=num[i-1], smallest=i;
+	for(j=i+1; j<n; j++)
+	{
+		if(num[j] > x && num[j] < num[smallest])
+			smallest = j;
+	}
+
+	swap(&num[smallest], &num[i-1]);
+	sort(num+i, num+n);
+	cout << "Next number with same set of digits is " << num;
+	return;
+}
+
+int main()
+{
+	char digits[] = "1432";
+	int n = strlen(digits);
+	findNext(digits, n);
+	return 0;
+}
+--------------------------------------------------------------------------------------------
+#include <bits/stdc++.h>
+using namespace std;
+
+vector<int> nextPermutation(int n, vector<int> arr)
+{
+	if(n == 1) return arr;
+	
+	int i=0;
+	for (i=n-1; i>=0; i--) 
+	{
+		if(arr[i] > arr[i-1])
+			break;
+	}
+	
+    	if(i==0) return {-1};                       //if not possible
+	if (i != 0)                                 //if possible
+	{
+		for(int j=n-1; j>=i; j--) 
+		{
+			if(arr[i-1] < arr[j]) 
+			{
+				swap(arr[i-1], arr[j]);
+				break;
+			}
+		}
+	}
+	reverse(arr.begin() + i, arr.end());
+
+	return arr;
+}
+
+int main()
+{
+	int n = 6;
+	vector<int> v{ 4,3,2,1 };
+
+	vector<int> res = nextPermutation(n, v);
+	for (int i=0; i<res.size(); i++) 
+	{
+		cout << res[i] << " ";
+	}
+}
+--------------------------------------------------------------------------------------------
+Q14) Balanced parenthesis		repeated question (in stack & queue)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:
+    bool isValid(string s) 
+    {
+        stack<char> st;
+        int n = s.size();
+        
+        for(int i=0; i<n; i++)
+        {
+            if(st.empty()) st.push(s[i]);
+            
+            else if( (st.top() == '{' && s[i] == '}') || 
+                     (st.top() == '[' && s[i] == ']') || 
+                     (st.top() == '(' && s[i] == ')')    )
+                st.pop();
+            
+            else st.push(s[i]);
+        }
+        
+        if(st.empty()) return true;
+        else return false;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q15) Implement strStr() [vari of rabin karp algo.]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 
+{
+public:
+    int strStr(string haystack, string needle) 
+    {
+        if(needle.empty()) return 0;
+        
+        for(int i=0; i<haystack.size(); i++)
+        {
+            for(int j=0; j<needle.size(); j++)
+            {
+                if(haystack[i+j] != needle[j])
+                    break;
+                
+                if(j == needle.size() - 1)
+                    return i;
+            }
+        }
+        return -1;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q16) Word break problem
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg efficient sol by DP
+{
+public:
+    unordered_map<string, int> dp;				//unordered dp
+    int solve(string s, vector<string> &b)			//helper function
+    {
+        int siz = s.size();
+        if(siz == 0) return 1;
+        if(dp[s] != 0) return dp[s];
+        
+        for(int i=1; i<=siz; i++)
+        {
+            int flag = 0;
+            for(int j=0; j<b.size(); j++)
+            {
+                if(s.substr(0,i).compare(b[j]) == 0)
+                {
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag == 1 && solve(s.substr(i, siz), b) == 1)
+                return dp[s] = 1;
+        }
+        return dp[s] = 0;
+    }
+    
+    int wordBreak(string A, vector<string> &B) 			//main function
+    {
+        int x = solve(A, B);
+        if(x == 1) return 1;
+        else return 0;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q17-I) Count the reversals [variation of balanced parenthesis]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+  public:		
+int countRev (string s)
+{
+    int n = s.size();
+    if(n%2 == 1) return -1;
+    else
+    {
+        stack<char> st;
+        int c1 = 0, c2 = 0;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '{') 
+            {
+                st.push(s[i]);
+                c1++;
+            }
+            else if(s[i] == '}' && !st.empty())
+            {
+                st.pop();
+                c1--;
+            }
+            else
+            {
+                c2++;
+            }
+        }
+        
+        if(c1%2 == 1) c1 = (c1/2)+1;
+        else c1 = c1/2;
+        if(c2%2 == 1) c2 = (c2/2)+1;
+        else c2 = c2/2;
+        return c1+c2;
+    }
+}
+};
+--------------------------------------------------------------------------------------------
+Q17-II) Minimum Add to Make Parentheses Valid
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:
+    int minAddToMakeValid(string s) 
+    {
+        int n = s.size();
+        stack<char> st;
+        int c1 = 0, c2 = 0;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '(')
+            {
+                st.push(s[i]);
+                c1++;
+            }
+            else if(s[i] == ')' && !st.empty())
+            {
+                st.pop();
+                c1--;
+            }
+            else
+            {
+                c2++;
+            }
+        }
+        return c1+c2;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q18) Count Palindromic Subsequences
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg recurssive sol
+{
+    public:
+    int solve(string s, int i, int j)                       //helper function
+    {
+        int mod = 1e9+7;
+        if(i > j) return 0;
+        if(i==j) return 1;
+       
+        else if(s[i] == s[j])
+           return (1 + solve(s, i+1, j) + solve(s, i, j-1))%mod;
+           
+        else
+            return (solve(s, i+1, j) + 
+                    solve(s, i, j-1) - 
+                    solve(s, i+1, j-1))%mod;
+    }
+    
+    long long int  countPS(string s)                        //main function
+    {
+       int n = s.size();
+       int i=0, j=n-1;
+       
+       return solve(s, i, j);
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution						       //gfg memo but not fully effi
+{
+    public:
+    int dp[1001][1001];
+    int solve(string s, int i, int j)                       //helper function
+    {
+        int mod = 1e9+7;
+        if(i > j) return 0;			//empty string
+        if(i==j) return 1;			//single char string
+        if(dp[i][j] != -1) return dp[i][j];	//already find
+        
+        else if(s[i] == s[j])
+           return dp[i][j] = (1 + solve(s, i+1, j) + solve(s, i, j-1))%mod;
+           
+        else
+            return dp[i][j] = (solve(s, i+1, j) + 
+                               solve(s, i, j-1) - 
+                               solve(s, i+1, j-1))%mod;
+    }
+    
+    long long int  countPS(string s)                        //main function
+    {
+       int n = s.size();
+       int i=0, j=n-1;
+       memset(dp, -1, sizeof(dp));
+       
+       return solve(s, i, j);
+    }
+};
+--------------------------------------------------------------------------------------------
+Q19) Convert a sentence into its equivalent mobile numeric keypad sequence 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+string printSequence(string s)						//gfg efficient sol
+{
+    string SP[] = { "2", "22", "222", "3", "33", "333", "4", "44", "444", 
+                    "5", "55", "555", "6", "66", "666", "7", "77", "777", "7777", 
+                    "8", "88", "888", "9", "99", "999", "9999" };
+                    
+    string ans = "";
+    for(int i=0; i<s.size(); i++)
+    {
+        if(s[i] == ' ') ans = ans + '0';
+        else
+        {
+            ans = ans + SP[s[i] - 65];                  //assci(A) = 65
+        }
+    }
+    return ans;
+}
+--------------------------------------------------------------------------------------------
+Q20) Count of number of given string in 2D character array
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#include <bits/stdc++.h>
+using namespace std;
+
+int solve(int i, int j, string s, char ch[6][6], int size, int idx)
+{
+    int found = 0;
+    if(i>=0 && j>=0 && i<6 && j<6 && s[idx] == ch[i][j])
+    {
+        char temp = ch[i][j];
+        ch[i][j] = 0;
+        idx = idx + 1;
+        if(idx == size) found = 1;
+        else
+        {
+            found = found + solve(i+1, j, s, ch, size, idx);
+            found = found + solve(i-1, j, s, ch, size, idx);
+            found = found + solve(i, j+1, s, ch, size, idx);
+            found = found + solve(i, j-1, s, ch, size, idx);
+        }
+        ch[i][j] = temp;
+    }
+    return found;
+}
+
+int main()
+{
+	string s = "MAGIC";
+	char ch[6][6] = { {'B','B','A','B','B','M'},
+			  {'C','B','M','B','B','A'},
+			  {'I','B','A','B','B','G'},
+			  {'G','O','Z','B','B','I'},
+			  {'A','B','C','B','B','C'},
+			  {'M','C','I','G','A','M'} };
+					
+	int ans = 0;
+	int size = s.size();
+	for(int i=0; i<6; i++)
+	{
+	    for(int j=0; j<6; j++)
+	    {
+	        ans = ans + solve(i, j, s, ch, size, 0);
+	    }
+	}
+	cout << ans;
+}
+--------------------------------------------------------------------------------------------
+Q21) Search a Word in a 2D Grid of characters.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+public:
+    int m, n;
+    bool solve(vector<vector<char>> &grid, string &word, int i, int j, int x, int y, int l)
+    {
+        if(i<0 || j<0 || i>m-1 || j>n-1 || grid[i][j] != word[l])
+            return false;
+            
+        if(l == word.size()-1) return true;
+        return solve(grid, word, x+i, y+j, x, y, l+1);
+    }
+    
+	vector<vector<int>> searchWord(vector<vector<char>>grid, string word)
+	{
+	    vector<vector<int>> ans;
+	    m = grid.size();                            //#of row
+	    n = grid[0].size();                         //#of col
+	    int x[] = {-1, -1, -1, 0, 0, 1, 1, 1};
+	    int y[] = {-1, 0, 1, -1, 1, -1, 0, 1};
+	    
+	    for(int i=0; i<m; i++)
+	    {
+	        for(int j=0; j<n; j++)
+	        {
+	            if(grid[i][j] == word[0])
+	            {
+	                for(int k=0; k<8; k++)
+	                {
+	                    if(solve(grid, word, i, j, x[k], y[k], 0))
+	                    {
+	                        ans.push_back({i, j});
+	                        break;
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    return ans;
+	}
+};
+--------------------------------------------------------------------------------------------
+Q22) Roman no. to integer
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg efficient sol
+{
+  public:
+    int romanToDecimal(string &s) 
+    {
+        int n = s.size();
+        map<char, int> mp;
+        mp['I'] = 1;
+        mp['V'] = 5;
+        mp['X'] = 10;
+        mp['L'] = 50;
+        mp['C'] = 100;
+        mp['D'] = 500;
+        mp['M'] = 1000;
+        
+        int ans = mp[s[n-1]];
+        
+        for(int i=n-2; i>=0; i--)
+        {
+            if(mp[s[i]] < mp[s[i+1]]) ans = ans - mp[s[i]];
+            else ans = ans + mp[s[i]];
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q23) Longest Common Prefix
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 							//Leetcode efficient sol
+{
+public:
+    string solve(string s1, string s2)			//helper fun
+    {
+        string temp_ans = "";
+        int len = min(s1.size(), s2.size());
+        for(int i=0; i<len; i++)
+        {
+            if(s1[i] != s2[i]) break;
+            temp_ans = temp_ans + s1[i];
+        }
+        return temp_ans;
+    }
+
+    string longestCommonPrefix(vector<string> &s) 	//main fun
+    {
+        string ans = s[0];
+        for(int i=1; i<s.size(); i++)
+            ans = solve(ans, s[i]);
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution								//gfg efficient sol
+{
+  public:
+    string solve(string &s1, string &s2)			//helper fun
+    {
+        string temp_ans = "";
+        int len = min(s1.size(), s2.size());
+        for(int i=0; i<len; i++)
+        {
+            if(s1[i] != s2[i]) break;
+            temp_ans = temp_ans + s1[i];
+        }
+        return temp_ans;
+    }
+    
+    string longestCommonPrefix (string arr[], int n)		//main fun
+    {       
+        string ans = arr[0];
+        for(int i=1; i<n; i++)
+            ans = solve(ans, arr[i]);
+        if(ans.size() == 0) return "-1";
+        else return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q24) Min Number of Flips 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+int minFlips (string s)
+{
+    int n = s.size();
+    int c1=0, c2=0;
+    for(int i=0; i<n; i++)
+    {
+        if(i%2 == 0 && s[i] == '1') c1++;			//case 1:- start with '0'
+        if(i%2 != 0 && s[i] == '0') c1++;
+        
+        if(i%2 == 0 && s[i] == '0') c2++;			//case 2:- start with '1'
+        if(i%2 != 0 && s[i] == '1') c2++;
+    }
+    return min(c1, c2);
+}
+--------------------------------------------------------------------------------------------
+Q25) Second most repeated string in a sequence
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{
+  public:
+    string secFrequent (string arr[], int n)
+    {
+        unordered_map<string, int> mp;
+        int mx = 0;
+        string s = "";
+        for(int i=0; i<n; i++)              //count all strings in arr[]
+        {
+            mp[arr[i]]++;
+            if(mp[arr[i]] > mx)             //find maxi count string
+            {
+                mx = mp[arr[i]];
+                s = arr[i];
+            }
+        }
+        
+        mp.erase(s);                        //erase maxi count string
+        mx = 0;
+        string ans = "";
+        for(auto it : mp)
+        {
+            if(it.second > mx)              //find maxi count string
+            {
+                ans = it.first;
+                mx = it.second;
+            }
+        }
+        return ans;                         //return maxi count string
+    }
+};
+--------------------------------------------------------------------------------------------
+Q26) Minimum Swaps for Bracket Balancing
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{   
+public:
+    int minimumNumberOfSwaps(string s)
+    {
+        int n = s.size();
+        vector<int> v;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '[') v.push_back(i);
+        }
+        
+        int ans = 0;
+        int count = 0;
+        int idx = 0;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '[')
+            {
+                count++;
+                idx++;
+            }
+            else
+            {
+                count--;
+                if(count < 0)
+                {
+                    ans = ans + v[idx] - i;
+                    swap(s[i], s[v[idx]]);
+                    count = 1;
+                    idx++;
+                }
+            }
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution						//gfg space also optimized
+{   
+public:
+    int minimumNumberOfSwaps(string s)
+    {
+        int n = s.size();
+        int ans = 0;
+        int op=0, cl=0, ft=0;
+        for(int i=0; i<n; i++)
+        {
+            if(s[i] == '[')				//for '['
+            {
+                op++;
+                if(ft > 0)
+                {
+                    ans = ans + ft;
+                    ft--;
+                }
+            }
+            else					//for ']'
+            {
+                cl++;
+                ft = cl - op;
+            }
+        }
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q27) Longest Common Subsequence [same Q in DP Q12]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg efficient top down
+{
+    public:
+    //Function to find the length of longest common subsequence in two strings.
+    int lcs(int n, int m, string s1, string s2)
+    {
+         int dp[n+1][m+1];
+        
+        for(int i=0; i<n+1; i++)                            //initialization
+        {
+            for(int j=0; j<m+1; j++)
+            {
+                if(i==0 || j==0) dp[i][j] = 0;
+            }
+        }
+        
+        for(int i=1; i<n+1; i++)                            //code
+        {
+            for(int j=1; j<m+1; j++)
+            {
+                if(s1[i-1] == s2[j-1])
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                    
+                else
+                    dp[i][j] = max(dp[i][j-1], dp[i-1][j]);
+            }
+        }
+        return dp[n][m];
+    }
+};
+--------------------------------------------------------------------------------------------
+Q28) Smallest distinct window 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg efficient sol
+{
+    public:
+    int findSubString(string s)
+    {
+        set<char> st;                           //for counting #of distinct char
+        for(int i=0; i<s.size(); i++)
+            st.insert(s[i]);
+        int n = st.size();
+        
+        unordered_map<char, int> mp;
+        int i=0, j=1, c=0;
+        mp[s[i]]++;
+        c++;
+        int ans = INT_MAX;
+        
+        while(i<=j && j<s.size())
+        {
+            if(c < n)				//window not contain all ele. expand j
+            {
+                if(mp[s[j]] == 0) c++;
+                mp[s[j]]++;
+                j++;
+            }
+            else if(c == n)			//shrink window from left side
+            {
+                ans = min(ans, j-i);
+                if(mp[s[i]] == 1) c--;
+                mp[s[i]]--;
+                i++;
+            }
+        }
+        
+        while(c == n)				//shrink window from left side if j==s.size()
+        {
+            ans = min(ans, j-i);
+            if(mp[s[i]] == 1) c--;
+            mp[s[i]]--;
+            i++;
+        }
+        return ans;
+    }
+};
+-------------------------------------------------------------------------------------------
+Q29) Reorganize String
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//Leetcode efficient sol 
+{
+public:
+    string reorganizeString(string s) 
+    {
+        string ans = "";
+        int count[26] = {0};
+        for(int i=0; i < s.length(); i++)       //count all char 
+        {
+            count[s[i] - 'a']++;
+        }
+        
+        typedef pair<int, char> ppi;
+        priority_queue<ppi> pq;                 //max heap
+        
+        for(char c='a'; c <= 'z'; c++)          //push pairs in  priority queue
+        {
+            int val = c - 'a';
+            if(count[val])
+                pq.push({count[val], c});
+        }
+        
+        ppi prev = {-1, '#'};
+        while(!pq.empty())                       //rearrange string 
+        {
+            ppi x = pq.top();
+            pq.pop();
+            ans = ans + x.second;
+            x.first--;
+            if(prev.first > 0)
+                pq.push(prev);
+            prev = x;
+        }
+        
+        if(ans.length() != s.length()) return "";       //if not possible
+        else return ans;                                //if possible
+    }
+};
+--------------------------------------------------------------------------------------------
+Q30) Minimum characters to be added at front to make string palindrome 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution 								//gfg brute force
+{
+public:
+    bool isPalindrome(string s)                             //helper function
+    {
+        int n = s.size();
+        for(int i=0, j=n-1; i<=j; i++, j--)
+        {
+            if(s[i] != s[j])
+                return false;
+        }
+        return true;
+    }
+    
+    int minChar(string s)                                   //main function
+    {
+        int c = 0;
+        int flag = 0;
+        while(s.size() > 0)
+        {
+            if(isPalindrome(s)) 
+            {
+                flag = 1;
+                break;
+            }
+            else
+            {
+                c++;
+                s.erase(s.begin() + s.size()-1);
+            }
+        }
+        if(flag) return c;
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution 							//gfg efficient sol by KMP
+{
+public:
+    int LPS(string s)               			   //helper fun(Largest prefix suffix)
+    {
+        int n = s.size();
+        vector<int> v(n);
+        
+        int len = 0;
+        v[0] = 0;
+        int i=1;
+        while(i < n)
+        {
+            if(s[i] == s[len])
+            {
+                len++;
+                v[i] = len;
+                i++;
+            }
+            else
+            {
+                if(len != 0) len = v[len-1];
+                else
+                {
+                    v[i] = 0;
+                    i++;
+                }
+            }
+        }
+        return v[n-1];
+    }
+    
+    int minChar(string s)                                   //main function
+    {
+        string revS = s;
+        reverse(revS.begin(), revS.end());
+        string concat = s + '#' + revS;
+        int x = LPS(concat);                                //largest prefix suffix
+        
+        return s.size() - x;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q31) KMP algorithm (Longest prefix suffix)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+  public:		
+	int lps(string s) 
+	{
+	    int n = s.size();
+	    vector<int> v(n);
+	    int len = 0;
+	    v[0] = 0;
+	    
+	    int i=1;
+	    while(i < n)
+	    {
+	        if(s[i] == s[len])
+	        {
+	            len++;
+	            v[i] = len;
+	            i++;
+	        }
+	        else
+	        {
+	            if(len != 0) len = v[len-1];
+	            else
+	            {
+	                v[i] = 0;
+	                i++;
+	            }
+	        }
+	    }
+	    return v[n-1];
+	}
+};
+--------------------------------------------------------------------------------------------
+Q32)Print anagram together
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+  public:
+    vector<vector<string>> Anagrams(vector<string>& s) 
+    {
+        vector<vector<string>> ans;
+        unordered_map<string, vector<string>> mp;
+        
+        for(int i=0; i<s.size(); i++)
+        {
+            string temp = s[i];
+            sort(temp.begin(), temp.end());
+            mp[temp].push_back(s[i]);
+        }
+        
+        for(auto it : mp)
+            ans.push_back(it.second);
+        
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+Q33) Smallest window in a string containing all the characters of another string 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution								//gfg efficient sol
+{
+    public:
+    //Function to find the smallest window in the string s consisting
+    //of all the characters of string p.
+    string smallestWindow (string s, string p)
+    {
+        if(s.size() < p.size()) return "-1";        //base cond
+        int c=0;
+
+        int mp[123] = {0};			
+        for(int i=0; i<p.size(); i++)
+        {
+            if(mp[p[i]] == 0) c++; 		//means char comes 1st time so, c++
+            mp[p[i]]++;
+        }
+            
+        int i=0, j=0, start=0, end=INT_MAX;
+        while(j < s.size())                     //expand j till p comes in our window
+        {
+            mp[s[j]]--;
+            if(mp[s[j]] == 0) c--;
+            if(c == 0)
+            {
+                while(c == 0)                   //shrink window from LHS using i
+                {
+                    if(end > j-i+1) 
+                    {
+                        end = j-i+1;
+                        start = i;
+                    }
+
+                    mp[s[i]]++;
+                
+                    if(mp[s[i]] > 0) c++;
+                    i++;
+                }
+            }
+            j++;
+        }
+        if(end == INT_MAX) return "-1";		//window not exist in "s"
+        else return s.substr(start, end);
+    }
+};
+--------------------------------------------------------------------------------------------
+class Solution						     //same code with unordered_map
+{
+    public:
+    //Function to find the smallest window in the string s consisting
+    //of all the characters of string p.
+    string smallestWindow (string s, string p)
+    {
+        if(s.size() < p.size()) return "-1";        //base cond
+        
+        unordered_map<char, int> mp;
+        for(int i=0; i<p.size(); i++)
+            mp[p[i]]++;
+            
+        int c = mp.size();
+        int i=0, j=0, start=0, end=INT_MAX;
+        while(j < s.size())
+        {
+            mp[s[j]]--;
+            if(mp[s[j]] == 0) c--;              
+            if(c == 0)
+            {
+                while(c == 0)
+                {
+                    if(end > j-i+1) 
+                    {
+                        end = j-i+1;
+                        start = i;
+                    }
+                    mp[s[i]]++;
+                    if(mp[s[i]] > 0) c++;
+                    i++;
+                }
+            }
+            j++;
+        }
+        if(end == INT_MAX) return "-1";
+        else return s.substr(start, end);
+    }
+};
+--------------------------------------------------------------------------------------------
+Q34) Remove Consecutive Characters
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution{							//gfg efficient sol
+    public:
+    string removeConsecutiveCharacter(string s)
+    {
+        stack<char> st;
+        for(int i=0; i<s.size(); i++)
+        {
+            if(st.empty() || (!st.empty() && st.top() != s[i]))
+            {
+                st.push(s[i]);
+            }
+        }
+        
+        string ans = "";
+        while(!st.empty())
+        {
+            ans = ans + st.top();
+            st.pop();
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+--------------------------------------------------------------------------------------------
+#include <bits/stdc++.h>					//iterative sol
+using namespace std;
+
+string removeDuplicates(string s)
+{
+    int n = s.size();
+    string ans = "";
+    for(int i=0; i<n-1; i++)
+    {
+        if(s[i] != s[i+1]) ans = ans + s[i];
+    }
+    ans.push_back(s[n-1]);
+    return ans;
+}
+
+int main() 
+{
+	string s1 = "geeksforgeeks";
+	cout << removeDuplicates(s1) << endl;
+	
+	string s2 = "aabcca";
+	cout << removeDuplicates(s2) << endl;
+	
+	return 0;
+}
+o/p:-
+geksforgeks
+abca
+--------------------------------------------------------------------------------------------
+Q35) Wildcard string matching
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution							//gfg efficient recurssion
+{
+    public:
+    int solve(int i, int j, string &w, string &p)
+    {
+        if(i<0 && j<0) return true;
+        if(i<0 && j>=0) return false;
+        if(i>=0 && j<0)
+        {
+            for(int ii=0; ii<=i; ii++)
+            {
+                if(w[ii] != '*') return false;
+            }
+            return true;
+        }
+        
+        if(w[i] == p[j] || w[i] == '?')
+            return solve(i-1, j-1, w, p);
+            
+        if(w[i] == '*')
+            return solve(i-1, j, w, p) || solve(i, j-1, w, p);
+            
+        return false;
+    }
+    
+    bool match(string wild, string pattern)
+    {
+        int n = wild.size();
+        int m = pattern.size();
+        return solve(n-1, m-1, wild, pattern);
+    }
+};
+--------------------------------------------------------------------------------------------
+Q36) Isomorphic strings
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+class Solution
+{
+    public:
+    //Function to check if two strings are isomorphic.
+    bool areIsomorphic(string s1, string s2)
+    {
+         int f1[26] = {0};
+         int f2[26] = {0};
+         int n = s1.size();
+         int m = s2.size();
+         
+         if(n != m) return false;
+         for(int i=0; i<n; i++)
+         {
+             f1[s1[i] - 'a']++;		//count freq of each char of s1
+             f2[s2[i] - 'a']++;		//count freq of each char of s2
+         }
+         
+         for(int i=0; i<n; i++)
+         {
+             if(f1[s1[i] - 'a'] != f2[s2[i] - 'a'])
+                return false;
+                
+             f1[s1[i] - 'a']--;
+             f2[s2[i] - 'a']--;
+         }
+         return true;
+    }
+};
+--------------------------------------------------------------------------------------------
