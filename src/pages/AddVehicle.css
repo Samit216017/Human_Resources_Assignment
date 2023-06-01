@@ -1,0 +1,94 @@
+.add_vehicle_page {
+    width: 75vw;
+    background-color: rgb(24, 22, 22);
+    display: flex;
+    flex-direction: column;
+    padding-left: 5rem;
+    padding-top: 2rem;
+}
+
+.add_vehicle_form_container {
+    color: rgb(196, 190, 190);
+    width: 60vw;
+    height: 30vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    row-gap: 30px;
+    background-color: dimgray;
+    padding-left: 30px;
+    padding-right: 20px;
+    padding-bottom: 60px;
+    border-radius: 5px;
+}
+
+#scenarios {
+    width: 250px;
+    height: 45px;
+    border: 2px solid skyblue;
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}
+
+#vehiclename {
+    width: 250px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}
+
+#vehiclename::placeholder {
+    padding: 30px;
+}
+
+#speed {
+    width: 250px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}
+
+#speed::placeholder {
+    padding: 30px;
+}
+
+#positionx {
+    width: 250px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}
+
+#positionx::placeholder {
+    padding: 30px;
+}
+
+#positiony {
+    width: 250px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}
+
+#positiony::placeholder {
+    padding: 30px;
+}
+
+#direction {
+    
+    width: 250px;
+    height: 45px;
+    border: 2px solid skyblue;
+    border-radius: 5px;
+    background: rgb(52, 49, 49);
+    color: dimgray;
+}

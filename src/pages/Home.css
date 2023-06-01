@@ -1,0 +1,144 @@
+.home_wrapper {
+    width: 75vw;
+    height: 100vh;
+    position: relative;
+    background-color: rgb(40, 34, 34);
+}
+
+.home_contents {
+    position: absolute;
+    left: 5%;
+    top: 3%;
+    right: 5%;
+    bottom: 3%;
+    background-color: rgb(40, 34, 34);
+}
+
+.scenario_content {
+    position: absolute;
+    left: 2%;
+}
+
+.scenario_option_list {
+    display: flex;
+    flex-direction: column;
+    color: rgb(196, 190, 190);
+    gap: 2px;
+}
+
+#scenario {
+    /* padding-top: 5px; */
+    width: 200px;
+    height: 30px;
+    background-color: dimgray;
+    border-radius: 5px;
+}
+
+.scenario_table {
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+}
+
+.scenario_table_contents {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    place-items: center;
+    color: white;
+    background-color: dimgrey;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.scenario_table_content {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    place-items: center;
+    color: black;
+    background-color: rgb(198, 196, 196);
+}
+
+.draw_line {
+    width: 100%;
+    border: 1px solid dimgrey;
+}
+
+.home_buttons {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 30px;
+}
+
+.home_buttons_stop {
+    padding: 10px 20px;
+    background-color: cornflowerblue;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.home_button_start {
+    padding: 10px 20px;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.square_boxes {
+    display: grid;
+    background: green;
+    grid-template-columns: repeat(14, 1fr);
+    grid-auto-rows: 60px;
+    /* place-items: center; */
+    /* border: 1px solid green; */
+    grid-gap: 1px;
+    padding: 1px;
+}
+
+.square_box {
+    background-color: black;
+}
+
+.square_box_29 {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.square_box_80 {
+    background-color: black;
+    display: flex;
+    flex-direction: column-reverse;
+    padding-left: 8px;
+    padding-bottom: 8px;
+}
+
+.circle_1 {
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: red;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.circle_2 {
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: blue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,33 @@
+.navs {
+    height: 100vh;
+    width: 25vw;
+    display: flex;
+    background-color: rgb(128, 198, 215);
+    list-style-type: none;
+    padding-top: 2rem;
+}
+
+.active {
+    color: blue;
+    background-color: rgb(173, 183, 173);
+    width: 25vw;
+    height: 35px;
+    padding-top: 13px;
+    margin-left: -13%;
+    padding-left: 50px;
+}
+
+.navItems {
+    width: 25vw;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    list-style-type: none;
+    font-weight: bold;
+    
+}
+
+.text {
+    text-decoration: none;
+}

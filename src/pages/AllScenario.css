@@ -1,0 +1,84 @@
+.allscenario_container {
+    width: 75vw;
+    height: 100vh;
+    background-color: rgb(24, 22, 22);
+    display: flex;
+    flex-direction: column;
+    padding-left: 5rem;
+    padding-top: 2rem;
+    padding-right: 5rem;
+    padding-bottom: 2rem;
+}
+
+.allscenario_container_items {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 5px;
+}
+
+.allscenario_container_firstitem {
+    color: rgb(196, 190, 190);
+    font-weight: bold;
+    font-size: large;
+}
+
+.allscenario_container_buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.newScenario_button {
+    padding: 10px 35px;
+    background-color: cornflowerblue;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.addVehicle_button {
+    padding: 10px 35px;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.delete_button {
+    padding: 10px 35px;
+    background-color: coral;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.allScenario_lists {
+    display: flex;
+    flex-direction: column;
+}
+
+.allScenario_headding {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    place-items: center;
+    color: white;
+    background-color: dimgrey;
+}
+
+.allScenario_headdings {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    place-items: center;
+    color: black;
+    background-color: rgb(198, 196, 196);
+}

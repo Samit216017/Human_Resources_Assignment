@@ -1,0 +1,93 @@
+.add_scenario_page {
+    width: 75vw;
+    height: 100vh;
+    background-color: rgb(24, 22, 22);
+    display: flex;
+    flex-direction: column;
+    padding-left: 5rem;
+    padding-top: 2rem;
+}
+
+.para_1 {
+    color: rgb(196, 190, 190);
+}
+
+.para_2 {
+    font-weight: bold;
+    font-size: x-large;
+    color: rgb(196, 190, 190);
+}
+
+.add_scenario_form_container {
+    color: rgb(196, 190, 190);
+    width: 60vw;
+    height: 20vh;
+    display: flex;
+    border-radius: 5px;
+    justify-content: space-around;
+    background-color: dimgray;
+}
+
+#scenarioname {
+    width: 300px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(24, 22, 22);
+    color: rgb(137, 135, 135);
+}
+
+#scenariotime {
+    width: 300px;
+    height: 40px;
+    border: 2px solid rgb(137, 135, 135);
+    border-radius: 5px;
+    background: rgb(24, 22, 22);
+    color: rgb(137, 135, 135);
+}
+
+#scenarioname::placeholder {
+    padding: 30px;
+
+}
+
+#scenariotime::placeholder {
+    padding: 30px;
+}
+
+.buttons_AddS {
+    display: flex;
+    flex-direction: row;
+    padding-top: 30px;
+    gap: 40px;
+}
+
+.buttons_AddS1 {
+    padding: 15px 35px;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.buttons_AddS2 {
+    padding: 15px 35px;
+    background-color: coral;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.buttons_AddS3 {
+    padding: 15px 35px;
+    background-color: cornflowerblue;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
